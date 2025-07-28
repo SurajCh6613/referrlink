@@ -1,12 +1,11 @@
-import React from "react";
-import Navbar from "./components/Navbar";
 import Refer from "./components/Refer";
-// import div from "react-router-dom"
+import Navbar from "./components/layout/Navbar";
+import Hero from "./pages/Home/Hero";
 const App = () => {
   return (
     <>
       <Navbar />
- 
+      <Hero />
     </>
   );
 };
