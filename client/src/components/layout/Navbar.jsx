@@ -20,13 +20,7 @@ const Navbar = () => {
         className="list-none hover:scale-105 duration-300"
         onClick={() => setIsOpen(false)}
       >
-        <Link to="/login">Login</Link>
-      </li>
-      <li
-        className="list-none hover:scale-105 duration-300"
-        onClick={() => setIsOpen(false)}
-      >
-        <Link to="/signup">Sign Up</Link>
+        <Link to="/login">Login/Sign Up</Link>
       </li>
     </>
   );
@@ -40,7 +34,7 @@ const Navbar = () => {
   return (
     <>
       <header className="flex  justify-between px-4 py-1 items-center bg-indigo-50 shadow-md">
-        <Link className="flex items-center w-12 h-12">
+        <Link to={'/'} className="flex items-center w-12 h-12">
           <img src="/logo.png" alt="ReferrLink logo" />
           <h1 className="text-3xl">
             Referr<span className="text-indigo-500 font-semibold">Link</span>{" "}

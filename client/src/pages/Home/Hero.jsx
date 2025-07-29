@@ -1,9 +1,9 @@
 import React from "react";
-import { MdOutlineLock } from "react-icons/md";
-import { MdCloudQueue } from "react-icons/md";
-import { MdOutlineDone } from "react-icons/md";
-import { MdOutlineCalendarToday } from "react-icons/md";
 import Footer from "../../components/layout/Footer";
+import HowItWorks from "./HowItWorks";
+import WhyChooseReferrLink from "./WhyChooseReferrLink";
+import SuccessStories from "./SuccessStories";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -20,10 +20,13 @@ const Hero = () => {
               Professionals helping professionals - the right way.
             </h3>
             <div className="flex flex-col sm:block gap-4">
-              <button className="bg-white py-4 px-5 rounded-md text-indigo-500 font-bold hover:scale-102 duration-300 mr-4">
+              <Link
+                to={"/login"}
+                className="bg-white py-4 px-5 rounded-md text-indigo-500 font-bold hover:scale-102 duration-300 mr-4 cursor-pointer"
+              >
                 Join Now
-              </button>
-              <button className="border-2 border-white py-4 px-5 rounded-md text-white hover:bg-indigo-400 duration-200 font-bold mr-4">
+              </Link>
+              <button className="border-2 border-white py-4 px-5 rounded-md text-white hover:bg-indigo-400 duration-200 font-bold mr-4 cursor-pointer">
                 Learn More
               </button>
             </div>
@@ -52,137 +55,13 @@ const Hero = () => {
         </div>
       </div>
       {/* How It Works Section */}
-      <div className="w-full h-50% flex flex-col items-center ">
-        <h1 className="font-bold text-3xl mt-16">How ReferrLink Works</h1>
-        <div className="flex  flex-col md:flex-row justify-between items-start gap-8 p-16">
-          <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
-            <h5 className="border w-12 h-12 p-2 pl-4 text-2xl rounded-full font-semibold text-indigo-500 bg-indigo-100 border-none mb-3">
-              1
-            </h5>
-            <h3 className="text-xl font-semibold mb-3">Create Your Profile</h3>
-            <p className="text-gray-700">
-              Build a professional profile showcasing your skills, experience,
-              and career goals.
-            </p>
-          </div>
-          <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
-            <h5 className="w-12 h-12 p-2 pl-4 text-2xl rounded-full font-semibold text-indigo-500 bg-indigo-100 border-none mb-3">
-              2
-            </h5>
-            <h3 className="text-xl font-semibold mb-3">
-              Connect with Professionals
-            </h3>
-            <p className="text-gray-700">
-              Find and connect with industry professionals at your target
-              companies.
-            </p>
-          </div>
-          <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
-            <h5 className="border w-12 h-12 p-2 pl-4 text-2xl rounded-full font-semibold text-indigo-500 bg-indigo-100 border-none mb-3">
-              3
-            </h5>
-            <h3 className="text-xl font-semibold mb-3">Request Referrals</h3>
-            <p className="text-gray-700">
-              Send personalized referral requests with all the required details.
-            </p>
-          </div>
-        </div>
-      </div>
+      <HowItWorks />
 
       {/* Why Choose ReferrLink */}
-      <section className="bg-gray-50">
-        <h1 className="text-center font-bold text-3xl pt-12">
-          Why Choose ReferrLink
-        </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 p-12">
-          <div className="flex items-center p-2 gap-2">
-            <MdOutlineDone className="w-12 h-12 p-2 bg-indigo-100 rounded-md text-indigo-500" />
-            <div className="flex flex-col">
-              <h3 className="text-xl font-semibold">Professional Network</h3>
-              <p className="text-gray-600">
-                Connect with verified professionals who are genuinely willing to
-                help.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center p-2 gap-2">
-            <MdOutlineLock className="w-12 h-12 p-2 bg-indigo-100 rounded-md text-indigo-500" />
-            <div className="flex flex-col">
-              <h3 className="text-xl font-semibold">Secure Platform</h3>
-              <p className="text-gray-600">
-                Your data is protected with industry-standard security measures.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center p-2 gap-2">
-            <MdCloudQueue className="w-12 h-12 p-2 bg-indigo-100 rounded-md text-indigo-500" />
-            <div className="flex flex-col">
-              <h3 className="text-xl font-semibold">Targeted Connections</h3>
-              <p className="text-gray-600">
-                Connects you with the most relevant
-                professionals in your field.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center p-2 gap-2">
-            <MdOutlineCalendarToday className="w-12 h-12 p-2 bg-indigo-100 rounded-md text-indigo-500" />
-            <div className="flex flex-col">
-              <h3 className="text-xl font-semibold">Tracking Dashboard</h3>
-              <p className="text-gray-600">
-                Monitor all your referral requests and responses in one
-                organized place.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <WhyChooseReferrLink />
 
       {/* Success Stories */}
-      <section>
-        <div className="w-full h-50% flex flex-col items-center ">
-          <h1 className="font-bold text-3xl mt-16">Success Stories</h1>
-          <div className="flex  flex-col md:flex-row justify-between items-start gap-8 p-16">
-            <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
-              <div className="flex gap-3">
-                <img
-                  className="border w-12 h-12 p-2 pl-4 text-2xl rounded-full font-semibold text-indigo-500 bg-indigo-100 border-none mb-3"
-                  src="/logo.png"
-                />
-                <div>
-                  <h2 className="text-xl font-semibold">Suraj Chaudhary</h2>
-                  <p className="text-gray-500">
-                    Software Developer at ReferrLink
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                "ReferrLand helped me get 3 interview calls within 2 weeks of
-                joining. The platform makes it so easy to connect with the right
-                people."
-              </p>
-            </div>
-            <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
-              <div className="flex gap-3">
-                <img
-                  className="border w-12 h-12 p-2 pl-4 text-2xl rounded-full font-semibold text-indigo-500 bg-indigo-100 border-none mb-3"
-                  src="/logo.png"
-                />
-                <div>
-                  <h2 className="text-xl font-semibold">Vikas Pandey</h2>
-                  <p className="text-gray-500">
-                    Software Developer at ReferrLink
-                  </p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                "As a referrer, I love how the platform organizes all requests
-                in one place. It's helped me refer 5 qualified candidates this
-                year."
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+      <SuccessStories />
       {/* CTA Section */}
       <section className="w-full h-full py-18 bg-indigo-50">
         <div className="flex flex-col items-center">
@@ -193,9 +72,12 @@ const Hero = () => {
             Join thousands of professionals who are already getting better
             opportunities through referrals.
           </p>
-          <button className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md hover:bg-indigo-700 text-xl">
+          <Link
+            to={"/login"}
+            className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md hover:bg-indigo-700 text-xl"
+          >
             Get Started - It's Free
-          </button>
+          </Link>
         </div>
       </section>
 
