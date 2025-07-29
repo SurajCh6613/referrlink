@@ -1,7 +1,25 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineClose, MdOutlineMenu } from "react-icons/md";
+import { useUser } from "../../context/UserContext";
+import axios from "axios";
 const Navbar = () => {
+  const { user, setUser } = useUser();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3000/api/user/logout",
+        {
+          withCredentials: true,
+        }
+      );
+      setUser(null);
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const navItems = (
     <>
       <li
@@ -10,18 +28,52 @@ const Navbar = () => {
       >
         <Link to="/">Home</Link>
       </li>
-      <li
-        className="list-none hover:scale-105 duration-300"
-        onClick={() => setIsOpen(false)}
-      >
-        <Link to="/how-it-works">How it Works</Link>
-      </li>
-      <li
-        className="list-none hover:scale-105 duration-300"
-        onClick={() => setIsOpen(false)}
-      >
-        <Link to="/login">Login/Sign Up</Link>
-      </li>
+      {user ? (
+        <li
+          className="list-none hover:scale-105 duration-300"
+          onClick={() => setIsOpen(false)}
+        >
+          <Link
+            to={`${
+              user.role === "junior" ? "/junior-dashboard" : "senior-dashboard"
+            }`}
+          >
+            Dashboard
+          </Link>
+        </li>
+      ) : (
+        <li
+          className="list-none hover:scale-105 duration-300"
+          onClick={() => setIsOpen(false)}
+        >
+          <Link to="/how-it-works">How it Works</Link>
+        </li>
+      )}
+      {user && user?.role === "junior" && (
+        <Link to="/find-senior">
+          <li className="list-none hover:scale-105 duration-300">
+            Find Senior
+          </li>
+        </Link>
+      )}
+      {user ? (
+        <li
+          className="list-none hover:scale-105 cursor-pointer duration-300 bg-red-400 py-1 px-2 rounded-md text-white"
+          onClick={() => {
+            setIsOpen(false);
+            handleLogout();
+          }}
+        >
+          Logout
+        </li>
+      ) : (
+        <li
+          className="list-none hover:scale-105 duration-300"
+          onClick={() => setIsOpen(false)}
+        >
+          <Link to="/login">Login/Sign Up</Link>
+        </li>
+      )}
     </>
   );
 
@@ -34,7 +86,7 @@ const Navbar = () => {
   return (
     <>
       <header className="flex  justify-between px-4 py-1 items-center bg-indigo-50 shadow-md">
-        <Link to={'/'} className="flex items-center w-12 h-12">
+        <Link to={"/"} className="flex items-center w-12 h-12">
           <img src="/logo.png" alt="ReferrLink logo" />
           <h1 className="text-3xl">
             Referr<span className="text-indigo-500 font-semibold">Link</span>{" "}
