@@ -1,3 +1,4 @@
+const logger = require("../Logger/logger");
 const generateToken = require("../middlewares/generateToken");
 const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
@@ -34,7 +35,7 @@ const registerUser = async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
     res.status(201).json({ user: newUser });
   } catch (error) {
-    console.error("Register Error:", error.message);
+    logger.error("Register Error:", error.message);
     res.status(500).json({ message: "Server Error" });
   }
 };
@@ -60,8 +61,8 @@ const loginUser = async (req, res) => {
     res.cookie("token", token);
     res.status(201).json({ user: user });
   } catch (error) {
-    console.error("Login Error:", error.message);
-    res.status(500).json({ message: "Server Error" });
+    logger.error("Login Error:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -70,8 +71,8 @@ const logoutUser = async (req, res) => {
     res.cookie("token", "");
     res.json({ message: "Logout Successfully" });
   } catch (error) {
-    console.error("Logout Error:", error.message);
-    res.status(500).json({ message: "Server Error" });
+    logger.error("Logout Error:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -80,8 +81,8 @@ const getUser = async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
     res.json(user);
   } catch (error) {
-    console.error("Get User Error:", error.message);
-    res.status(500).json({ message: "Server Error" });
+    logger.error("Get User Error:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -100,7 +101,7 @@ const editUser = async (req, res) => {
     );
     res.status(201).json({ user: updatedUser });
   } catch (error) {
-    console.error("Edit User Error:", error.message);
+    logger.error("Edit User Error:", error.message);
     res.status(500).json({ message: "Server Error" });
   }
 };
