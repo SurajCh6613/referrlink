@@ -4,7 +4,7 @@ import Navbar from "./components/layout/Navbar";
 import Hero from "./pages/Home/Hero";
 import Login from "./pages/Auth/Login";
 import HowItWorks from "./pages/Home/HowItWorks";
-import JuniorDashboard from "./pages/User/JuniorDashBoard";
+import JuniorDashboard from "./pages/User/JuniorDashboard";
 import SeniorDashboard from "./pages/User/SeniorDashboard";
 import FindSenior from "./pages/FindSenior";
 import PrivateRoute from "./components/PrivateRoute";
@@ -35,3 +35,4 @@ const App = () => {
 };
 
 export default App;
+
