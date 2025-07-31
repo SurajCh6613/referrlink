@@ -47,17 +47,14 @@ const JuniorDashboard = () => {
     <section className="p-6 bg-gray-50">
       <div className="flex justify-between w-full h-12 mb-8">
         <div>
-          <h2 className="text-3xl font-bold">
-            Welcome <span className="text-indigo-600">{user?.name}</span>
+          <h2 className="text-xl md:text-3xl font-bold">
+            Welcome <span className="text-indigo-600">{user?.firstname + " " + user?.lastname || "Junior"}</span>
           </h2>
           <p className="text-gray-600">
             Track your referral requests and progress
           </p>
         </div>
-        <button
-          to={"find-senior"}
-          className="bg-indigo-600 text-white font-semibold rounded-md px-3 py-3 cursor-pointer"
-        >
+        <button className="bg-indigo-600 text-white font-semibold text-xs px-2 sm:text-sm sm:px-3 rounded-md  py-1 cursor-pointer">
           <Link to={"/find-senior"}>Request New Referral</Link>
         </button>
       </div>
