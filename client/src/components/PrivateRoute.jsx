@@ -1,10 +1,11 @@
 import React from "react";
 import { useUser } from "../context/UserContext";
 import { Navigate, Outlet } from "react-router-dom";
+import Spinner from "./layout/Spinner";
 
 const PrivateRoute = ({ allowedRoles }) => {
   const { user, loading } = useUser();
-  if (loading) return <div>Loading....</div>;
+  if (loading) return <Spinner />;
   if (!user) {
     return <Navigate to="/login" replace />;
   }
