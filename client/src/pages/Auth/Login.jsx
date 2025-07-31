@@ -3,14 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
 import { useUser } from "../../context/UserContext";
+import { toast } from "react-toastify";
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
-  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { user, setUser, loading, setLoading } = useUser();
   const [formData, setFormData] = useState({
-    name: "",
+    firstname: "",
+    lastname: "",
     email: "",
     password: "",
     role: "junior",
@@ -40,7 +41,7 @@ const Login = () => {
         : navigate("/senior-dashboard");
     } catch (error) {
       setLoading(false);
-      setError(error.response.data.message);
+      toast.error(error.response.data.message);
       console.log("Login Error:", error, error.response, error.response.data);
     } finally {
       setLoading(false);
@@ -96,15 +97,24 @@ const Login = () => {
             </div>
 
             {!isLogin ? (
-              <div className="flex flex-col">
+              <div className="flex flex-col w-full">
                 <label htmlFor="username">Full Name</label>
-                <input
-                  name="name"
-                  className="border border-gray-400 shadow-md rounded-md p-3"
-                  type="text"
-                  placeholder="Enter You Full Name"
-                  onChange={onChangeHandler}
-                />
+                <div className="flex justify-between gap-2">
+                  <input
+                    name="firstname"
+                    className="border w-1/2 border-gray-400 shadow-md rounded-md p-3"
+                    type="text"
+                    placeholder="First name"
+                    onChange={onChangeHandler}
+                  />
+                  <input
+                    name="lastname"
+                    className="border w-1/2 border-gray-400 shadow-md rounded-md p-3"
+                    type="text"
+                    placeholder="Last name"
+                    onChange={onChangeHandler}
+                  />
+                </div>
               </div>
             ) : (
               ""
@@ -142,37 +152,10 @@ const Login = () => {
                 )}
               </button>
             </div>
-            {!isLogin ? (
-              <>
-                <div className="flex flex-col">
-                  <label htmlFor="college">College/University</label>
-                  <input
-                    name="college"
-                    className="border border-gray-400 shadow-md rounded-md p-3"
-                    type="text"
-                    placeholder="Enter Your College"
-                    onChange={onChangeHandler}
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="skills">Skills (comma-seperated)</label>
-                  <input
-                    name="skills"
-                    className="border border-gray-400 shadow-md rounded-md p-3"
-                    type="text"
-                    placeholder="e.g., React,Java,JavaScript"
-                    onChange={onChangeHandler}
-                  />
-                </div>
-              </>
-            ) : (
-              ""
-            )}
             <button className="bg-indigo-500 w-full py-3 rounded-md hover:bg-indigo-400 duration-300 text-white font-semibold">
               {isLogin ? "Login" : "Register"}
             </button>
           </form>
-          {error ? <p className="text-center text-red-500 ">{error}</p> : ""}
 
           <div className="mb-6 text-center mt-2">
             {isLogin ? "Don't have an account? " : "Already have an account? "}

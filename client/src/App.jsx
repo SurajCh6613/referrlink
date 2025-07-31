@@ -8,10 +8,13 @@ import JuniorDashboard from "./pages/User/JuniorDashboard";
 import SeniorDashboard from "./pages/User/SeniorDashboard";
 import FindSenior from "./pages/FindSenior";
 import PrivateRoute from "./components/PrivateRoute";
+import UpdateProfile from "./pages/User/UpdateProfile";
+import { ToastContainer } from "react-toastify";
 const App = () => {
   return (
     <>
       <Router>
+        <ToastContainer position={"top-right"} autoClose={2000} />
         <Navbar />
         <Routes>
           <Route path="/" element={<Hero />} />
@@ -19,6 +22,11 @@ const App = () => {
           <Route path="/how-it-works" element={<HowItWorks />} />
 
           {/* Protected Routes */}
+
+          <Route element={<PrivateRoute allowedRoles={["junior", "senior"]} />}>
+            <Route path="/update-profile" element={<UpdateProfile />} />
+          </Route>
+
           {/* Junior Only */}
           <Route element={<PrivateRoute allowedRoles={["junior"]} />}>
             <Route path="/junior-dashboard" element={<JuniorDashboard />} />
@@ -35,4 +43,3 @@ const App = () => {
 };
 
 export default App;
-
