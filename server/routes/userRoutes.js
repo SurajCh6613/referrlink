@@ -3,8 +3,8 @@ const {
   registerUser,
   loginUser,
   getUser,
-  editUser,
   logoutUser,
+  updateUser,
 } = require("../controllers/userController");
 const auth = require("../middlewares/auth");
 const router = express.Router();
@@ -13,6 +13,6 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/me", auth, getUser);
 router.get("/logout", auth, logoutUser);
-router.patch("/edit/:id", auth, editUser);
+router.patch("/update/:id", auth, updateUser);
 
 module.exports = router;

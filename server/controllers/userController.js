@@ -1,4 +1,4 @@
-const { log } = require("winston");
+const { log, profile } = require("winston");
 const logger = require("../Logger/logger");
 const generateToken = require("../middlewares/generateToken");
 const User = require("../models/userSchema");
@@ -6,13 +6,10 @@ const bcrypt = require("bcrypt");
 
 const registerUser = async (req, res) => {
   try {
-    let { name, email, password, role, college, skills } = req.body;
-    if (!name || !email || !password || !role || !college || !skills) {
+    let { firstname, lastname, email, password, role } = req.body;
+    if (!firstname || !lastname || !email || !password || !role) {
       return res.status(400).json({ message: "All fields are required." });
     }
-
-    // Skills parsing
-    skills = skills ? skills.split(",").map((skill) => skill.trim()) : [];
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -20,14 +17,16 @@ const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
+    if (firstname && lastname) {
+      const avatar = `${firstname[0]}${lastname[0]}`.toUpperCase();
+    }
     const newUser = new User({
-      name,
+      firstname,
+      lastname,
       email,
       password: hashedPassword,
       role,
-      college,
-      skills,
+      avatar,
     });
 
     await newUser.save();
@@ -87,41 +86,92 @@ const getUser = async (req, res) => {
   }
 };
 
-const editUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
-    const { email, password, name, role, college, skills } = req.body;
-    const existingUser = await User.findById(req.user._id);
-    if (!existingUser) {
-      return res.status(404).json({ message: "User not found" });
+    let {
+      firstname,
+      lastname,
+      headline,
+      about,
+      experience,
+      education,
+      skills,
+      resumeUrl,
+      linkedInUrl,
+      githubUrl,
+    } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
     }
+    const updateFields = {};
+    firstname !== undefined ? (updateFields.firstname = firstname) : "";
+    lastname !== undefined ? (updateFields.lastname = lastname) : "";
 
-    // If email is being changed, check for duplicates
-    if (email !== existingUser.email) {
-      const emailExits = await User.findOne({ email });
-      console.log(emailExits);
-      
-      if (emailExits && emailExits._id != req.user._id) {
-        return res.status(400).json({ message: "Email already in use" });
+    const avatar = `${firstname ? firstname[0] : user.firstname[0]}${
+      lastname ? lastname[0] : user.lastname[0]
+    }`.toUpperCase();
+    updateFields.avatar = avatar;
+
+    // Update profile sub-fields
+    headline !== undefined
+      ? (updateFields["profile.headline"] = headline)
+      : user.profile.headline;
+    about !== undefined
+      ? (updateFields["profile.about"] = about)
+      : user?.profile.about;
+
+    // Experience Updation
+    if (experience !== undefined) {
+      const oldExperience = user?.profile?.experience || [];
+
+      // Check for valid experience, Add new entry only if it’s valid
+      if (
+        experience.title &&
+        experience.company &&
+        experience.duration &&
+        experience.description
+      ) {
+        updateFields["profile.experience"] = [...oldExperience, experience];
       }
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Education updation
+    if (education !== undefined) {
+      const oldEducation = user?.profile?.education || [];
+
+      // Check for valid experience, Add new entry only if it’s valid
+      if (education.degree && education.institution && education.year) {
+        updateFields["profile.education"] = [...oldEducation, education];
+      }
+    }
+
+    // Skills Updation
+    const newSkills = skills?.split(",").map((skill) => skill.trim());
+    const skillSet = new Set([...(user?.profile?.skills || []), ...newSkills]);
+    updateFields["profile.skills"] = Array.from(skillSet);
+    // Resume Updation
+    if (resumeUrl !== undefined) updateFields["profile.resumeUrl"] = resumeUrl;
+    // Linkedin URL Updation
+    if (linkedInUrl !== undefined)
+      updateFields["profile.linkedInUrl"] = linkedInUrl;
+    // Github URL Updation
+    if (githubUrl !== undefined) updateFields["profile.githubUrl"] = githubUrl;
+
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
-      {
-        name,
-        email,
-        password: hashedPassword,
-        role,
-        college,
-        skills,
-      },
+      { $set: updateFields },
       { new: true }
     );
-    res.status(201).json({ user: updatedUser });
+
+    if (!updateUser) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    return res.status(201).json({ user: updatedUser });
   } catch (error) {
-    logger.error({ message: error.errorResponse.errmsg });
-    res.status(500).json({ message: "Server Error" });
+    logger.error("Update user error:", error);
+    res.json("Update user error:", error);
   }
 };
 
-module.exports = { registerUser, loginUser, getUser, editUser, logoutUser };
+module.exports = { registerUser, loginUser, getUser, updateUser, logoutUser };
