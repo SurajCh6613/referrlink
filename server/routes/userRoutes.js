@@ -13,6 +13,6 @@ router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/me", auth, getUser);
 router.get("/logout", auth, logoutUser);
-router.put("/edit/:id", auth, editUser);
+router.patch("/edit/:id", auth, editUser);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+const { log } = require("winston");
 const logger = require("../Logger/logger");
 const generateToken = require("../middlewares/generateToken");
 const User = require("../models/userSchema");
@@ -88,20 +89,37 @@ const getUser = async (req, res) => {
 
 const editUser = async (req, res) => {
   try {
-    const { email, password, name, role } = req.body;
+    const { email, password, name, role, college, skills } = req.body;
+    const existingUser = await User.findById(req.user._id);
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If email is being changed, check for duplicates
+    if (email !== existingUser.email) {
+      const emailExits = await User.findOne({ email });
+      console.log(emailExits);
+      
+      if (emailExits && emailExits._id != req.user._id) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
+    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await User.findByIdAndUpdate(
-      { _id: req.user._id },
+      req.user._id,
       {
         name,
         email,
         password: hashedPassword,
         role,
-      }
+        college,
+        skills,
+      },
+      { new: true }
     );
     res.status(201).json({ user: updatedUser });
   } catch (error) {
-    logger.error("Edit User Error:", error.message);
+    logger.error({ message: error.errorResponse.errmsg });
     res.status(500).json({ message: "Server Error" });
   }
 };
