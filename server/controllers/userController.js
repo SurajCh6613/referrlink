@@ -17,9 +17,9 @@ const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    if (firstname && lastname) {
-      const avatar = `${firstname[0]}${lastname[0]}`.toUpperCase();
-    }
+
+    const avatar = `${firstname[0]}${lastname[0]}`.toUpperCase();
+
     const newUser = new User({
       firstname,
       lastname,
@@ -35,6 +35,8 @@ const registerUser = async (req, res) => {
     res.cookie("token", token, { httpOnly: true });
     res.status(201).json({ user: newUser });
   } catch (error) {
+    console.log(error);
+
     logger.error("Register Error:", error.message);
     res.status(500).json({ message: "Server Error" });
   }
@@ -99,6 +101,8 @@ const updateUser = async (req, res) => {
       resumeUrl,
       linkedInUrl,
       githubUrl,
+      city,
+      country,
     } = req.body;
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -150,6 +154,11 @@ const updateUser = async (req, res) => {
     const newSkills = skills?.split(",").map((skill) => skill.trim());
     const skillSet = new Set([...(user?.profile?.skills || []), ...newSkills]);
     updateFields["profile.skills"] = Array.from(skillSet);
+
+    // Location Updation
+    if (city !== undefined) updateFields["profile.location.city"] = city;
+    if (country !== undefined) updateFields["profile.location.country"] = country;
+
     // Resume Updation
     if (resumeUrl !== undefined) updateFields["profile.resumeUrl"] = resumeUrl;
     // Linkedin URL Updation

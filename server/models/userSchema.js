@@ -45,6 +45,10 @@ const userSchema = mongoose.Schema(
         },
       ],
       skills: [String],
+      location: {
+        city: String,
+        country: String,
+      },
       resumeUrl: String,
       linkedInUrl: String,
       githubUrl: String,
