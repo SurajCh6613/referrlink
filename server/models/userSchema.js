@@ -33,7 +33,8 @@ const userSchema = mongoose.Schema(
         {
           title: String,
           company: String,
-          duration: String,
+          from: Date,
+          to: Date,
           description: String,
         },
       ],

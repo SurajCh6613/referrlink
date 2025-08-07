@@ -10,6 +10,7 @@ import FindSenior from "./pages/FindSenior";
 import PrivateRoute from "./components/PrivateRoute";
 import UpdateProfile from "./pages/User/UpdateProfile";
 import { ToastContainer } from "react-toastify";
+import MyProfile from "./pages/User/MyProfile";
 const App = () => {
   return (
     <>
@@ -25,6 +26,7 @@ const App = () => {
 
           <Route element={<PrivateRoute allowedRoles={["junior", "senior"]} />}>
             <Route path="/update-profile" element={<UpdateProfile />} />
+            <Route path="/myProfile" element={<MyProfile />} />
           </Route>
 
           {/* Junior Only */}

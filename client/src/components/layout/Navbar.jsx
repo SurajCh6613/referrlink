@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdOutlineClose, MdOutlineMenu } from "react-icons/md";
 import { useUser } from "../../context/UserContext";
+import BACKEND_API from "../../config/config";
 import axios from "axios";
 const Navbar = () => {
   const { user, setUser } = useUser();
@@ -9,12 +10,9 @@ const Navbar = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3000/api/user/logout",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${BACKEND_API}/api/user/logout`, {
+        withCredentials: true,
+      });
       setUser(null);
       navigate("/login");
     } catch (error) {
@@ -66,15 +64,15 @@ const Navbar = () => {
             <p className="bg-indigo-200 hidden md:block w-12 h-12 rounded-full text-xl px-3 py-2">
               {user?.avatar}
             </p>
-            <p
+            <div
               className={`absolute w-42  h-16 top-12 right-2 rounded-sm bg-indigo-100 p-4 ${
                 toggleProfile ? "block" : "hidden"
               }`}
             >
               <div className="flex gap-2 flex-col">
-                <Link to={"update-profile"}>Update Profile</Link>
+                <Link to={"myProfile"}>My Profile</Link>
               </div>
-            </p>
+            </div>
           </button>
 
           <li
@@ -119,23 +117,25 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         <div className="md:hidden flex gap-2">
-          <button
-            onClick={() => setToggleProfile(!toggleProfile)}
-            className="relative cursor-pointer"
-          >
-            <p className="bg-indigo-200  md:block w-8 h-8 rounded-full text-sm px-1 py-1">
-              {user?.avatar}
-            </p>
-            <p
-              className={`absolute w-[500%]  h-[200%] top-10 right-2 rounded-sm bg-indigo-100 p-4 ${
-                toggleProfile ? "block" : "hidden"
-              }`}
+          {user && (
+            <button
+              onClick={() => setToggleProfile(!toggleProfile)}
+              className="relative cursor-pointer"
             >
-              <div className="flex gap-1 flex-col">
-                <Link to={"update-profile"}>Update Profile</Link>
+              <p className="bg-indigo-200  md:block w-8 h-8 rounded-full text-sm px-1 py-1">
+                {user?.avatar}
+              </p>
+              <div
+                className={`absolute w-[500%]  h-[200%] top-10 right-2 rounded-sm bg-indigo-100 p-4 ${
+                  toggleProfile ? "block" : "hidden"
+                }`}
+              >
+                <div className="flex gap-1 flex-col">
+                  <Link to={"myProfile"}>My Profile</Link>
+                </div>
               </div>
-            </p>
-          </button>
+            </button>
+          )}
           <button className="md:hidden" onClick={toggleSidebar}>
             <MdOutlineMenu className="text-3xl text-indigo-500" />
           </button>

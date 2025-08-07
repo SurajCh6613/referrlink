@@ -118,12 +118,9 @@ const updateUser = async (req, res) => {
     updateFields.avatar = avatar;
 
     // Update profile sub-fields
-    headline !== undefined
-      ? (updateFields["profile.headline"] = headline)
-      : user.profile.headline;
-    about !== undefined
-      ? (updateFields["profile.about"] = about)
-      : user?.profile.about;
+    if (headline !== undefined) updateFields["profile.headline"] = headline;
+
+    if (about !== undefined) updateFields["profile.about"] = about;
 
     // Experience Updation
     if (experience !== undefined) {
@@ -133,7 +130,8 @@ const updateUser = async (req, res) => {
       if (
         experience.title &&
         experience.company &&
-        experience.duration &&
+        experience.from &&
+        experience.to &&
         experience.description
       ) {
         updateFields["profile.experience"] = [...oldExperience, experience];
@@ -151,13 +149,19 @@ const updateUser = async (req, res) => {
     }
 
     // Skills Updation
-    const newSkills = skills?.split(",").map((skill) => skill.trim());
-    const skillSet = new Set([...(user?.profile?.skills || []), ...newSkills]);
-    updateFields["profile.skills"] = Array.from(skillSet);
+    if (skills !== undefined) {
+      const newSkills = skills?.split(",").map((skill) => skill.trim());
+      const skillSet = new Set([
+        ...(user?.profile?.skills || []),
+        ...newSkills,
+      ]);
+      updateFields["profile.skills"] = Array.from(skillSet);
+    }
 
     // Location Updation
     if (city !== undefined) updateFields["profile.location.city"] = city;
-    if (country !== undefined) updateFields["profile.location.country"] = country;
+    if (country !== undefined)
+      updateFields["profile.location.country"] = country;
 
     // Resume Updation
     if (resumeUrl !== undefined) updateFields["profile.resumeUrl"] = resumeUrl;
@@ -173,14 +177,28 @@ const updateUser = async (req, res) => {
       { new: true }
     );
 
-    if (!updateUser) {
+    if (!updatedUser) {
       return res.status(401).json({ message: "User not found" });
     }
     return res.status(201).json({ user: updatedUser });
   } catch (error) {
-    logger.error("Update user error:", error);
-    res.json("Update user error:", error);
+    logger.error({ message: "Update user error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Update user error", error: error.message });
   }
 };
 
-module.exports = { registerUser, loginUser, getUser, updateUser, logoutUser };
+const deleteUser = async (req, res) => {
+  console.log(req.params);
+  const userId = req.params.id;
+};
+
+module.exports = {
+  registerUser,
+  loginUser,
+  getUser,
+  updateUser,
+  logoutUser,
+  deleteUser,
+};

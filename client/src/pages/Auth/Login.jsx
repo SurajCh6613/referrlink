@@ -4,6 +4,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
 import { useUser } from "../../context/UserContext";
 import { toast } from "react-toastify";
+import BACKEND_API from '../../config/config'
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
@@ -29,7 +30,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/user/${endpoint}`,
+        `${BACKEND_API}/api/user/${endpoint}`,
         formData,
         {
           withCredentials: true,
@@ -132,7 +133,7 @@ const Login = () => {
               />
             </div>
             <div className="flex flex-col relative">
-              <label htmlFor="email">Password</label>
+              <label htmlFor="password">Password</label>
               <input
                 name="password"
                 className="border border-gray-400 shadow-md rounded-md p-3"
