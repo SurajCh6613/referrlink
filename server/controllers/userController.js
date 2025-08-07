@@ -32,7 +32,12 @@ const registerUser = async (req, res) => {
     await newUser.save();
 
     const token = generateToken(newUser._id);
-    res.cookie("token", token, { httpOnly: true });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     res.status(201).json({ user: newUser });
   } catch (error) {
     console.log(error);
@@ -60,7 +65,12 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
     const token = generateToken(user._id);
-    res.cookie("token", token);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     res.status(201).json({ user: user });
   } catch (error) {
     logger.error("Login Error:", error.message);
@@ -70,7 +80,12 @@ const loginUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   try {
-    res.cookie("token", "");
+    res.cookie("token", "", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      expires: new Date(0), // Expire immediately
+    });
     res.json({ message: "Logout Successfully" });
   } catch (error) {
     logger.error("Logout Error:", error.message);
