@@ -9,72 +9,108 @@ import BACKEND_API from "../../config/config";
 const UpdateProfile = () => {
   const { user, setUser } = useUser();
   const navigate = useNavigate();
+  const [experienceFormData, setExperienceFormData] = useState(
+    user.experience.length > 0
+      ? user?.experience
+      : [{ jobRole: " ", company: "", from: "", to: "", description: "" }]
+  );
+
+  const [educationFormData, setEducationFormData] = useState(
+    user.education.length > 0
+      ? user.education
+      : [
+          {
+            degree: "",
+            institution: "",
+            year: "",
+          },
+        ]
+  );
 
   const [formData, setFormData] = useState({
     firstname: user?.firstname || "",
     lastname: user?.lastname || "",
-    headline: user?.profile?.headline || "",
-    about: user?.profile?.about || "",
-    city: user?.profile?.location?.city || "",
-    country: user?.profile?.location?.country || "",
-    linkedInUrl: user?.profile?.linkedInUrl || "",
-    githubUrl: user?.profile?.githubUrl || "",
-    resumeUrl: user?.profile?.resumeUrl || "",
+    headline: user?.headline || "",
+    about: user?.about || "",
+    city: user?.location?.city || "",
+    country: user?.location?.country || "",
+    linkedInUrl: user?.linkedInUrl || "",
+    githubUrl: user?.githubUrl || "",
+    resumeUrl: user?.resumeUrl || "",
     skills: "",
-    experience: {
-      title: "",
-      company: "",
-      from: "",
-      to: "",
-      description: "",
-    },
-    education: {
-      degree: "",
-      institution: "",
-      year: "",
-    },
   });
 
-  const [addExperienceForm, setAddExperienceForm] = useState(false);
-  const [addEducationForm, setAddEducationForm] = useState(false);
+  const addExperience = () => {
+    setExperienceFormData((prev) => [
+      ...prev,
+      { jobRole: " ", company: "", from: "", to: "", description: "" },
+    ]);
+  };
+
+  const removeExperience = (index) => {
+    setExperienceFormData((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const addEducation = () => {
+    setEducationFormData((prev) => [
+      ...prev,
+      {
+        degree: "",
+        institution: "",
+        year: "",
+      },
+    ]);
+  };
+  console.log(educationFormData);
+  const removeEducation = (index) => {
+    setEducationFormData((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleExperienceChange = (index, e) => {
+    const { name, value } = e.target;
+    if (name.startsWith("Exp")) {
+      let expName = name.split(".")[1];
+      setExperienceFormData((prev) => {
+        const updated = [...prev];
+        updated[index][expName] = value;
+        return updated;
+      });
+    }
+  };
+
+  const handleEducationChange = (index, e) => {
+    const { name, value } = e.target;
+    if (name.startsWith("Edu")) {
+      const eduName = name.split(".")[1];
+      setEducationFormData((prev) => {
+        const updated = [...prev];
+        updated[index][eduName] = value;
+        return updated;
+      });
+    }
+  };
 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
-    if (
-      name === "title" ||
-      name === "company" ||
-      name === "from" ||
-      name === "to" ||
-      name === "description"
-    ) {
-      setFormData((prev) => ({
-        ...prev,
-        experience: {
-          ...prev.experience,
-          [name]: value,
-        },
-      }));
-    } else if (name === "degree" || name === "institution" || name === "year") {
-      setFormData((prev) => ({
-        ...prev,
-        education: {
-          ...prev.education,
-          [name]: value,
-        },
-      }));
+    //  set Experience Form Data
+    if (name.startsWith("Edu")) {
+      let eduName = name.split(".")[1];
+      setEducationFormData((prev) => ({ ...prev, [eduName]: value }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+  const handleUpdate = async () => {
     try {
-      const response = await axios.patch(
-        `${BACKEND_API}/api/user/update/${user._id}`,
-        formData,
-        { withCredentials: true }
-      );
+      const payload = {
+        ...formData,
+        education: educationFormData,
+        experience: experienceFormData,
+      };
+      const response = await axios.patch(`${BACKEND_API}/api/user`, payload, {
+        withCredentials: true,
+      });
       setUser(response.data.user);
       navigate("/myProfile");
     } catch (error) {
@@ -192,14 +228,13 @@ const UpdateProfile = () => {
                 <input
                   type="text"
                   name="headline"
-                  defaultValue={user?.profile?.headline}
+                  defaultValue={user?.headline}
                   onChange={onChangeHandler}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Professional Headline"
                 />
               </div>
             </div>
-            <div></div>
           </div>
 
           {/* About Section */}
@@ -216,7 +251,7 @@ const UpdateProfile = () => {
                 id="about"
                 rows={4}
                 name="about"
-                defaultValue={user?.profile?.about}
+                defaultValue={user?.about}
                 onChange={onChangeHandler}
                 placeholder="About yourself"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -239,7 +274,7 @@ const UpdateProfile = () => {
                   type="text"
                   name="city"
                   id="city"
-                  defaultValue={user?.profile?.location?.city}
+                  defaultValue={user?.location?.city}
                   onChange={onChangeHandler}
                   placeholder="Your city"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -256,7 +291,7 @@ const UpdateProfile = () => {
                   type="text"
                   name="country"
                   id="country"
-                  defaultValue={user?.profile?.location?.country}
+                  defaultValue={user?.location?.country}
                   onChange={onChangeHandler}
                   placeholder="Your country"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -308,7 +343,7 @@ const UpdateProfile = () => {
                     type="text"
                     id="linkedin"
                     name="linkedInUrl"
-                    defaultValue={user?.profile?.linkedInUrl}
+                    defaultValue={user?.linkedInUrl}
                     onChange={onChangeHandler}
                     placeholder="https://www.linkedin.com/in/user_id"
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -330,7 +365,7 @@ const UpdateProfile = () => {
                     type="text"
                     id="github"
                     name="githubUrl"
-                    defaultValue={user?.profile?.githubUrl}
+                    defaultValue={user?.githubUrl}
                     onChange={onChangeHandler}
                     placeholder="https://github.com/user_id"
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -353,7 +388,7 @@ const UpdateProfile = () => {
               <input
                 type="text"
                 name="resumeUrl"
-                defaultValue={user.profile.resumeUrl}
+                defaultValue={user.resumeUrl}
                 onChange={onChangeHandler}
                 placeholder="Enter your resume link"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
@@ -361,237 +396,212 @@ const UpdateProfile = () => {
             </div>
           </div>
 
-          {/* Experience & Education */}
-          <div className="flex flex-col md:flex-row ">
+          {/* Experience Section */}
+          <div className="bg-white w-full">
             {" "}
-            {/* Experience Section */}
-            <div className="bg-white w-full">
-              {" "}
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold">Experience</h2>
-                  <button
-                    onClick={() => setAddExperienceForm(!addExperienceForm)}
-                    className="text-indigo-600 hover:text-indigo-800 flex items-center"
-                  >
-                    {addExperienceForm ? "Close" : "Add Experience"}
-                  </button>
-                </div>
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Experience</h2>
+                <button
+                  onClick={addExperience}
+                  type="button"
+                  className="text-indigo-600 hover:text-indigo-800 flex items-center cursor-pointer"
+                >
+                  Add Experience
+                </button>
+              </div>
 
-                {addExperienceForm ? (
-                  <div className="mb-6 last:mb-0 p-4 border border-gray-200 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Job Title
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue=""
-                          name="title"
-                          onChange={onChangeHandler}
-                          required
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Company
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue=""
-                          name="company"
-                          required
-                          onChange={onChangeHandler}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          From
-                        </label>
-                        <input
-                          type="date"
-                          defaultValue=""
-                          required
-                          name="from"
-                          onChange={onChangeHandler}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          To
-                        </label>
-                        <input
-                          type="date"
-                          defaultValue=""
-                          name="to"
-                          onChange={onChangeHandler}
-                          required
-                          className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
-                      }`}
-                        />
-                      </div>
+              {experienceFormData.map((exp, index) => (
+                <div
+                  key={index}
+                  className="mb-6 last:mb-0 p-4 border border-gray-200 rounded-lg"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Job Role
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue={exp.jobRole}
+                        name="Exp.jobRole"
+                        onChange={(e) => handleExperienceChange(index, e)}
+                        required
+                        placeholder="Software Engineer"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Description
+                        Company
                       </label>
-                      <textarea
-                        rows={3}
-                        defaultValue=""
-                        name="description"
-                        onChange={onChangeHandler}
+                      <input
+                        type="text"
+                        defaultValue={exp.company}
+                        name="Exp.company"
                         required
+                        onChange={(e) => handleExperienceChange(index, e)}
+                        placeholder="Google"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                     </div>
                   </div>
-                ) : (
-                  ""
-                )}
-
-                {user.profile.experience.length > 0 ? (
-                  user.profile.experience.map((exp) => (
-                    <div
-                      key={exp._id}
-                      className="bg-white shadow-md rounded-xl p-4 border border-gray-300 hover:shadow-lg transition-shadow mb-2"
-                    >
-                      <h3 className="text-lg font-bold text-indigo-600">
-                        {exp.title}
-                        <span className="text-sm text-gray-500">
-                          {" "}
-                          at {exp.company}
-                        </span>
-                      </h3>
-
-                      <p className="text-sm text-gray-400">
-                        {new Date(exp.from).toLocaleDateString()} -{" "}
-                        {exp.to
-                          ? new Date(exp.to).toLocaleDateString()
-                          : "Present"}
-                      </p>
-                      <p className="text-sm mt-2 text-gray-700">
-                        {exp.description}
-                      </p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-center text-xl rounded-md text-gray-400  p-4">
-                    No Experience added
-                  </p>
-                )}
-              </div>
-            </div>
-            {/* Education Section */}
-            <div className="bg-white w-full md:border-l">
-              {" "}
-              <div className="p-6 border-b border-gray-200">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-semibold">Education</h2>
-                  <button
-                    type="button"
-                    onClick={() => setAddEducationForm(!addEducationForm)}
-                    className="text-indigo-600 hover:text-indigo-800 flex items-center"
-                  >
-                    {addEducationForm ? "Close" : "Add Education"}
-                  </button>
-                </div>
-
-                {addEducationForm ? (
-                  <div className="mb-6 last:mb-0 p-4 border border-gray-200 rounded-lg">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Degree
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue=""
-                          name="degree"
-                          onChange={onChangeHandler}
-                          required
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Institution
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue=""
-                          name="institution"
-                          required
-                          onChange={onChangeHandler}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Passing Year
+                        From
                       </label>
                       <input
                         type="date"
-                        defaultValue=""
+                        defaultValue={
+                          exp.from
+                            ? new Date(exp?.from).toISOString().split("T")[0]
+                            : ""
+                        }
                         required
-                        name="year"
-                        onChange={onChangeHandler}
+                        name="Exp.from"
+                        onChange={(e) => handleExperienceChange(index, e)}
+                        placeholder="Jan 2022"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        To
+                      </label>
+                      <input
+                        type="date"
+                        defaultValue={
+                          exp.from
+                            ? new Date(exp?.to).toISOString().split("T")[0]
+                            : ""
+                        }
+                        name="Exp.to"
+                        placeholder="Dec 2025"
+                        onChange={(e) => handleExperienceChange(index, e)}
+                        required
+                        className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500
+                      }`}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      rows={3}
+                      defaultValue={exp.description}
+                      name="Exp.description"
+                      onChange={(e) => handleExperienceChange(index, e)}
+                      required
+                      placeholder="Brief experience"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => removeExperience(index)}
+                      className="text-red-500 cursor-pointer"
+                    >
+                      Remove Experience
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Education Section */}
+          <div className="bg-white w-full md:border-l">
+            {" "}
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Education</h2>
+                <button
+                  type="button"
+                  onClick={addEducation}
+                  className="text-indigo-600 hover:text-indigo-800 flex items-center"
+                >
+                  Add Education
+                </button>
+              </div>
+              {educationFormData.map((edu, index) => (
+                <div
+                  key={index}
+                  className="mb-6 last:mb-0 p-4 border border-gray-200 rounded-lg"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Degree
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue=""
+                        name="Edu.degree"
+                        onChange={(e) => handleEducationChange(index, e)}
+                        required
+                        placeholder="B.Tech"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Institution
+                      </label>
+                      <input
+                        type="text"
+                        defaultValue=""
+                        name="Edu.institution"
+                        required
+                        onChange={(e) => handleEducationChange(index, e)}
+                        placeholder="College Name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                       />
                     </div>
                   </div>
-                ) : (
-                  ""
-                )}
-
-                {user.profile.education.length > 0 ? (
-                  user.profile.education.map((edu) => (
-                    <div
-                      key={edu._id}
-                      className="bg-white shadow-md rounded-xl p-4 border border-gray-300 hover:shadow-lg transition-shadow mb-2"
-                    >
-                      <h3 className="text-lg font-bold text-indigo-600">
-                        {edu.degree}
-                        <span className="text-sm text-gray-500">
-                          {" "}
-                          from {edu.institution}
-                        </span>
-                      </h3>
-
-                      <p className="text-sm text-gray-400">{edu.year}</p>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-center rounded-md text-xl text-gray-400 p-4">
-                    No Education added
-                  </p>
-                )}
-              </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Passing Year
+                    </label>
+                    <input
+                      type="date"
+                      defaultValue=""
+                      required
+                      name="Edu.year"
+                      placeholder="2025"
+                      onChange={(e) => handleEducationChange(index, e)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    />
+                  </div>
+                  <div className="flex justify-end mt-1">
+                    <button className="text-red-500 cursor-pointer">
+                      Remove Education
+                    </button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
 
-          {/* Form Actions */}
-          <div className="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
-            <button
-              type="button"
-              className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              onClick={handleUpdate}
-              className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Save Changes
-            </button>
-          </div>
+        {/* Form Actions */}
+        <div className="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+          <button
+            type="button"
+            onClick={() => navigate("/myProfile")}
+            className="px-4 py-2 border cursor-pointer border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            onClick={handleUpdate}
+            className="inline-flex cursor-pointer justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Save Changes
+          </button>
         </div>
       </div>
     </div>

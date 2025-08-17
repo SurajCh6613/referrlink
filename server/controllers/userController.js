@@ -6,9 +6,15 @@ const bcrypt = require("bcrypt");
 
 const registerUser = async (req, res) => {
   try {
-    let { firstname, lastname, email, password, role } = req.body;
+    let { firstname, lastname, email, password, role, company, jobRole } =
+      req.body;
     if (!firstname || !lastname || !email || !password || !role) {
       return res.status(400).json({ message: "All fields are required." });
+    }
+    if ((role === "senior" && !jobRole) || (role === "senior" && !company)) {
+      return res
+        .status(400)
+        .json({ message: "Job Role & Company are required." });
     }
 
     const existingUser = await User.findOne({ email });
@@ -28,6 +34,13 @@ const registerUser = async (req, res) => {
       role,
       avatar,
     });
+
+    if (role === "senior") {
+      newUser.experience = {
+        company,
+        jobRole,
+      };
+    }
 
     await newUser.save();
 
@@ -103,6 +116,26 @@ const getUser = async (req, res) => {
   }
 };
 
+const allUsers = async (req, res) => {
+  try {
+    const user = await User.find({}).select("-password");
+    res.json(user);
+  } catch (error) {
+    logger.error("Get All User Error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getSeniors = async (req, res) => {
+  try {
+    const user = await User.find({ role: "senior" }).select("-password");
+    res.json(user);
+  } catch (error) {
+    logger.error("Get Senior Error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const updateUser = async (req, res) => {
   try {
     let {
@@ -133,58 +166,62 @@ const updateUser = async (req, res) => {
     updateFields.avatar = avatar;
 
     // Update profile sub-fields
-    if (headline !== undefined) updateFields["profile.headline"] = headline;
+    if (headline !== undefined) updateFields["headline"] = headline;
 
-    if (about !== undefined) updateFields["profile.about"] = about;
+    if (about !== undefined) updateFields["about"] = about;
 
     // Experience Updation
+    // Experience Updation
     if (experience !== undefined) {
-      const oldExperience = user?.profile?.experience || [];
+      // Ensure experience is always an array
+      const newExperiences = Array.isArray(experience)
+        ? experience
+        : [experience];
 
-      // Check for valid experience, Add new entry only if it’s valid
-      if (
-        experience.title &&
-        experience.company &&
-        experience.from &&
-        experience.to &&
-        experience.description
-      ) {
-        updateFields["profile.experience"] = [...oldExperience, experience];
+      // Filter only valid experiences (with required fields)
+      const validExperiences = newExperiences.filter(
+        (exp) =>
+          exp.jobRole && exp.company && exp.from && exp.to && exp.description
+      );
+
+      if (validExperiences.length > 0) {
+        // Append new experiences to old ones
+        updateFields["experience"] = [...validExperiences];
       }
     }
-
     // Education updation
     if (education !== undefined) {
-      const oldEducation = user?.profile?.education || [];
+      // Ensure experience is always an array
+      const newEducations = Array.isArray(education) ? education : [education];
+
+      // Filtering valid educations
+      const validEducations = newEducations.filter(
+        (edu) => edu.degree && edu.institution && edu.year
+      );
 
       // Check for valid experience, Add new entry only if it’s valid
-      if (education.degree && education.institution && education.year) {
-        updateFields["profile.education"] = [...oldEducation, education];
+      if (validEducations.length > 0) {
+        updateFields["education"] = [...validEducations];
       }
     }
 
     // Skills Updation
     if (skills !== undefined) {
       const newSkills = skills?.split(",").map((skill) => skill.trim());
-      const skillSet = new Set([
-        ...(user?.profile?.skills || []),
-        ...newSkills,
-      ]);
-      updateFields["profile.skills"] = Array.from(skillSet);
+      const skillSet = new Set([...(user?.skills || []), ...newSkills]);
+      updateFields["skills"] = Array.from(skillSet);
     }
 
     // Location Updation
-    if (city !== undefined) updateFields["profile.location.city"] = city;
-    if (country !== undefined)
-      updateFields["profile.location.country"] = country;
+    if (city !== undefined) updateFields["location.city"] = city;
+    if (country !== undefined) updateFields["location.country"] = country;
 
     // Resume Updation
-    if (resumeUrl !== undefined) updateFields["profile.resumeUrl"] = resumeUrl;
+    if (resumeUrl !== undefined) updateFields["resumeUrl"] = resumeUrl;
     // Linkedin URL Updation
-    if (linkedInUrl !== undefined)
-      updateFields["profile.linkedInUrl"] = linkedInUrl;
+    if (linkedInUrl !== undefined) updateFields["linkedInUrl"] = linkedInUrl;
     // Github URL Updation
-    if (githubUrl !== undefined) updateFields["profile.githubUrl"] = githubUrl;
+    if (githubUrl !== undefined) updateFields["githubUrl"] = githubUrl;
 
     const updatedUser = await User.findByIdAndUpdate(
       req.user._id,
@@ -205,14 +242,21 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  console.log(req.params);
-  const userId = req.params.id;
+  try {
+    const response = await User.findByIdAndDelete(req.user._id);
+    return res.json({ deletedUser: response });
+  } catch (error) {
+    logger.error({ error });
+    return res.json({ message: "Delete User error" });
+  }
 };
 
 module.exports = {
   registerUser,
   loginUser,
   getUser,
+  allUsers,
+  getSeniors,
   updateUser,
   logoutUser,
   deleteUser,

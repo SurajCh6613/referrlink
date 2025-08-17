@@ -26,35 +26,34 @@ const userSchema = mongoose.Schema(
       type: String,
       default: "",
     },
-    profile: {
-      headline: String,
-      about: String,
-      experience: [
-        {
-          title: String,
-          company: String,
-          from: Date,
-          to: Date,
-          description: String,
-        },
-      ],
-      education: [
-        {
-          degree: String,
-          institution: String,
-          year: String,
-        },
-      ],
-      skills: [String],
-      location: {
-        city: String,
-        country: String,
+    headline: String,
+    about: String,
+    experience: [
+      {
+        jobRole: String,
+        company: String,
+        from: Date,
+        to: Date,
+        description: String,
       },
-      resumeUrl: String,
-      linkedInUrl: String,
-      githubUrl: String,
+    ],
+    education: [
+      {
+        degree: String,
+        institution: String,
+        year: String,
+      },
+    ],
+    skills: [String],
+    location: {
+      city: String,
+      country: String,
     },
+    resumeUrl: String,
+    linkedInUrl: String,
+    githubUrl: String,
   },
+
   { timestamps: true }
 );
 

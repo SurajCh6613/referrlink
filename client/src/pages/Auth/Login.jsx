@@ -4,7 +4,7 @@ import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
 import { useUser } from "../../context/UserContext";
 import { toast } from "react-toastify";
-import BACKEND_API from '../../config/config'
+import BACKEND_API from "../../config/config";
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
@@ -16,8 +16,8 @@ const Login = () => {
     email: "",
     password: "",
     role: "junior",
-    college: "",
-    skills: [],
+    jobRole: "",
+    company: "",
   });
 
   const onChangeHandler = (e) => {
@@ -153,6 +153,30 @@ const Login = () => {
                 )}
               </button>
             </div>
+            {formData.role === "senior" && !isLogin && (
+              <>
+                <div className="flex flex-col">
+                  <label htmlFor="jobRole">Job Role</label>
+                  <input
+                    name="jobRole"
+                    className="border border-gray-400 shadow-md rounded-md p-3"
+                    type="text"
+                    placeholder="Software Developer"
+                    onChange={onChangeHandler}
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="company">Company</label>
+                  <input
+                    name="company"
+                    className="border border-gray-400 shadow-md rounded-md p-3"
+                    type="text"
+                    placeholder="Google"
+                    onChange={onChangeHandler}
+                  />
+                </div>
+              </>
+            )}
             <button className="bg-indigo-500 w-full py-3 rounded-md hover:bg-indigo-400 duration-300 text-white font-semibold">
               {isLogin ? "Login" : "Register"}
             </button>

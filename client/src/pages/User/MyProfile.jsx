@@ -1,7 +1,6 @@
 import { useUser } from "../../context/UserContext";
 import { Link } from "react-router-dom";
 
-
 const MyProfile = () => {
   const { user } = useUser();
   return (
@@ -22,21 +21,18 @@ const MyProfile = () => {
               <h2 className="text-xl font-semibold">
                 {user.firstname} {user.lastname}
               </h2>
-              <p className="text-gray-600">{user?.profile?.headline}</p>
+              <p className="text-gray-600">{user?.headline}</p>
               <span className="text-gray-500">
-                {user?.profile?.location?.city}
+                {user?.location?.city}
                 {", "}
-                {user?.profile?.location?.country}
+                {user?.location?.country}
               </span>
             </div>
           </div>
         </div>
 
         {/* Main Form */}
-        <div
- 
-          className="bg-white rounded-xl shadow-sm overflow-hidden"
-        >
+        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
           {/* Basic Information */}
           <div className="bg-white px-6 py-2">
             <h3 className="text-xl font-semibold">Basic Information</h3>
@@ -50,7 +46,7 @@ const MyProfile = () => {
                 htmlFor="about"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                {user?.profile?.about}
+                {user?.about}
               </label>
             </div>
           </div>
@@ -60,7 +56,7 @@ const MyProfile = () => {
             <h3 className="text-xl font-semibold">Your Skills</h3>
             <div className="mt-1">
               <div className="flex flex-wrap gap-2">
-                {user?.profile?.skills.map((skill) => (
+                {user?.skills.map((skill) => (
                   <li
                     key={skill}
                     className="mb-1 bg-indigo-50 px-1 text-gray-600 rounded-md list-none"
@@ -83,11 +79,11 @@ const MyProfile = () => {
                 >
                   LinkedIn :{" "}
                   <a
-                    href={user?.profile?.linkedInUrl}
+                    href={user?.linkedInUrl}
                     className="text-indigo-600"
                     type="_blank"
                   >
-                    {user?.profile?.linkedInUrl}
+                    {user?.linkedInUrl}
                   </a>
                 </label>
               </div>
@@ -97,8 +93,8 @@ const MyProfile = () => {
                   className="block text-sm font-medium text-gray-700 mb-1"
                 >
                   GitHub :{" "}
-                  <a href={user?.profile?.githubUrl} className="text-indigo-600">
-                    {user?.profile?.githubUrl}
+                  <a href={user?.githubUrl} className="text-indigo-600">
+                    {user?.githubUrl}
                   </a>
                 </label>
               </div>
@@ -109,10 +105,7 @@ const MyProfile = () => {
           <div className="px-6 py-2">
             <h3 className="text-xl font-semibold">
               Resume URL:{" "}
-              <a
-                href={user?.profile?.resumeUrl}
-                className="text-indigo-600 underline"
-              >
+              <a href={user?.resumeUrl} className="text-indigo-600 underline">
                 See Resume
               </a>{" "}
             </h3>
@@ -129,14 +122,14 @@ const MyProfile = () => {
                   <h2 className="text-xl font-semibold">Experience</h2>
                 </div>
 
-                {user.profile.experience.length > 0 ? (
-                  user.profile.experience.map((exp) => (
+                {user.experience.length > 0 ? (
+                  user.experience.map((exp,index) => (
                     <div
-                      key={exp._id}
+                      key={index}
                       className="bg-white shadow-md rounded-xl p-4 border border-gray-300 hover:shadow-lg transition-shadow mb-2"
                     >
                       <h3 className="text-lg font-bold text-indigo-600">
-                        {exp.title}
+                        {exp.jobRole}
                         <span className="text-sm text-gray-500">
                           {" "}
                           at {exp.company}
@@ -144,7 +137,10 @@ const MyProfile = () => {
                       </h3>
 
                       <p className="text-sm text-gray-400">
-                        {new Date(exp.from).toLocaleDateString()} -{" "}
+                        {exp.from
+                          ? new Date(exp.from).toLocaleDateString()
+                          : "YYYY"}{" "}
+                        -{" "}
                         {exp.to
                           ? new Date(exp.to).toLocaleDateString()
                           : "Present"}
@@ -169,8 +165,8 @@ const MyProfile = () => {
                   <h2 className="text-xl font-semibold">Education</h2>
                 </div>
 
-                {user.profile.education.length > 0 ? (
-                  user.profile.education.map((edu) => (
+                {user.education.length > 0 ? (
+                  user.education.map((edu) => (
                     <div
                       key={edu._id}
                       className="bg-white shadow-md rounded-xl p-4 border border-gray-300 hover:shadow-lg transition-shadow mb-2"

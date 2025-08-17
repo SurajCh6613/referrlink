@@ -1,9 +1,8 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import BACKEND_API from '../config/config'
+import BACKEND_API from "../config/config";
 const UserContext = createContext(null);
 export const useUser = () => useContext(UserContext);
-
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
