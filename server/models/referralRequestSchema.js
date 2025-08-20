@@ -2,25 +2,26 @@ const mongoose = require("mongoose");
 
 const referralRequestSchema = mongoose.Schema(
   {
-    junior: {
+    senderId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    senior: {
+    recieverId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    message: String,
-    company: String,
-    jobRole: String,
+    jobRole: { type: String, required: true },
+    company: { type: String, required: true },
+    message: { type: String },
     resumeUrl: String,
     status: {
       type: String,
       enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
+    responseMessage: { type: String },
   },
   { timestamps: true }
 );
