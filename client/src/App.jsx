@@ -11,6 +11,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import UpdateProfile from "./pages/User/UpdateProfile";
 import { ToastContainer } from "react-toastify";
 import MyProfile from "./pages/User/MyProfile";
+import RequestReferralForm from "./components/RequestReferralForm";
 const App = () => {
   return (
     <>
@@ -33,6 +34,7 @@ const App = () => {
           <Route element={<PrivateRoute allowedRoles={["junior"]} />}>
             <Route path="/junior-dashboard" element={<JuniorDashboard />} />
             <Route path="/find-senior" element={<FindSenior />} />
+            <Route path="/request-referral/:id" element={<RequestReferralForm />} />
           </Route>
           {/* Seniors Only */}
           <Route element={<PrivateRoute allowedRoles={["senior"]} />}>

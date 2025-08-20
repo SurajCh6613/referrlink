@@ -9,8 +9,8 @@ const Hero = () => {
   return (
     <div className="">
       {/* Home Section */}
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 pb-12 p-4">
-        <div className="flex flex-col sm:flex-row h-full w-full items-center justify-around pt-4 pl-4 pr-4">
+      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 md:pb-12 sm:p-4">
+        <div className="flex flex-col-reverse sm:flex-row h-full w-full items-center justify-around pt-4 pl-4 pr-4">
           <div className="w-full sm:w-2/3">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 md:mb-10 flex flex-col gap-4">
               <span>Bridge the Gap Between</span>{" "}
@@ -22,7 +22,7 @@ const Hero = () => {
             <div className="flex flex-col sm:block gap-4">
               <Link
                 to={"/login"}
-                className="bg-white py-4 px-5 rounded-md text-indigo-500 font-bold hover:scale-102 duration-300 mr-4 cursor-pointer"
+                className="bg-white py-4 px-5 rounded-md text-indigo-500 text-center font-bold hover:scale-102 duration-300 mr-4 cursor-pointer"
               >
                 Join Now
               </Link>
@@ -63,7 +63,7 @@ const Hero = () => {
       {/* Success Stories */}
       <SuccessStories />
       {/* CTA Section */}
-      <section className="w-full h-full py-18 bg-indigo-50">
+      <section className="w-full h-full px-4 py-8 md:py-16 bg-indigo-50">
         <div className="flex flex-col items-center">
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6">
             Ready to Boost Your Career?

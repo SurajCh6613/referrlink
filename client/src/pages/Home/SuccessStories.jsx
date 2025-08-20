@@ -4,8 +4,8 @@ const SuccessStories = () => {
   return (
     <section>
       <div className="w-full h-50% flex flex-col items-center ">
-        <h1 className="font-bold text-3xl mt-16">Success Stories</h1>
-        <div className="flex  flex-col md:flex-row justify-between items-start gap-8 p-16">
+        <h1 className="font-bold text-3xl mt-8 md:mt-16">Success Stories</h1>
+        <div className="flex  flex-col md:flex-row justify-between items-start gap-8 px-4 py-3 md:p-16">
           <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
             <div className="flex gap-3">
               <img

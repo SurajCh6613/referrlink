@@ -51,7 +51,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center w-full h-full bg-gray-50 px-12 py-8">
+      <div className="flex items-center justify-center w-full h-full bg-gray-50 md:px-12 py-8">
         <div className="flex flex-col gap-3 justify-between w-112 h-full rounded-md shadow-md px-10 py-2">
           <h3 className="text-3xl text-center font-semibold">
             Welcome back to Referr<span className="text-indigo-600">Link</span>
@@ -65,14 +65,14 @@ const Login = () => {
           >
             <div>
               <label>{isLogin ? "Login as:" : "Register as:"}</label>
-              <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center justify-center gap-4 mt-2">
                 <button
                   onClick={(e) => {
                     e.preventDefault();
                     setFormData((prev) => ({ ...prev, role: "junior" }));
                   }}
                   name="role"
-                  className={`w-full px-3 py-4 border rounded-md text-xl shadow-md duration-300 ${
+                  className={`w-full px-2 py-2 md:px-3 md:py-4 border rounded-md text-xl shadow-md duration-300 ${
                     formData.role === "junior"
                       ? "border-2 border-indigo-500 bg-indigo-100 font-semibold"
                       : "border-gray-400 hover:scale-102"
@@ -86,7 +86,7 @@ const Login = () => {
                     e.preventDefault();
                     setFormData((prev) => ({ ...prev, role: "senior" }));
                   }}
-                  className={`w-full px-3 py-4 border rounded-md text-xl shadow-md duration-300 ${
+                  className={`w-full px-2 py-2 md:px-3 md:py-4  border rounded-md text-xl shadow-md duration-300 ${
                     formData.role === "senior"
                       ? "border-2 border-indigo-500 bg-indigo-100 font-semibold"
                       : "border-gray-400 hover:scale-102"
@@ -106,6 +106,7 @@ const Login = () => {
                     className="border w-1/2 border-gray-400 shadow-md rounded-md p-3"
                     type="text"
                     placeholder="First name"
+                    required
                     onChange={onChangeHandler}
                   />
                   <input
@@ -113,6 +114,7 @@ const Login = () => {
                     className="border w-1/2 border-gray-400 shadow-md rounded-md p-3"
                     type="text"
                     placeholder="Last name"
+                    required
                     onChange={onChangeHandler}
                   />
                 </div>
@@ -129,6 +131,7 @@ const Login = () => {
                 type="email"
                 placeholder="example@gmail.com"
                 autoComplete="username"
+                required
                 onChange={onChangeHandler}
               />
             </div>
@@ -140,6 +143,7 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Your Password"
                 autoComplete="current-password"
+                required
                 onChange={onChangeHandler}
               />
               <button
@@ -161,6 +165,7 @@ const Login = () => {
                     name="jobRole"
                     className="border border-gray-400 shadow-md rounded-md p-3"
                     type="text"
+                    required
                     placeholder="Software Developer"
                     onChange={onChangeHandler}
                   />
@@ -172,12 +177,13 @@ const Login = () => {
                     className="border border-gray-400 shadow-md rounded-md p-3"
                     type="text"
                     placeholder="Google"
+                    required
                     onChange={onChangeHandler}
                   />
                 </div>
               </>
             )}
-            <button className="bg-indigo-500 w-full py-3 rounded-md hover:bg-indigo-400 duration-300 text-white font-semibold">
+            <button className="bg-indigo-500 w-full py-3 mt-2 rounded-md hover:bg-indigo-400 duration-300 text-white font-semibold">
               {isLogin ? "Login" : "Register"}
             </button>
           </form>

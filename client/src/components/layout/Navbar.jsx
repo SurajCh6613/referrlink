@@ -141,7 +141,7 @@ const Navbar = () => {
           </button>
         </div>
         <nav
-          className={`absolute md:hidden w-[40%] h-full top-0 left-0 bg-white  z-10 duration-300 ${
+          className={`absolute md:hidden w-[100%] h-full top-0 left-0 bg-white pt-10  z-10 duration-300 ${
             isOpen ? `translate-x-0` : `-translate-x-full`
           }`}
         >

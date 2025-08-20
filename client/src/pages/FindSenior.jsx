@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { MdSearch } from "react-icons/md";
 import { useUser } from "../context/UserContext";
 import { TbMoodSad } from "react-icons/tb";
+import { useEffect } from "react";
+import axios from "axios";
+import BACKEND_API from "../config/config";
 
 const FindSenior = () => {
   const { user } = useUser();
@@ -10,64 +13,52 @@ const FindSenior = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
     company: "",
-    position: "",
+    jobRole: "",
   });
 
   // Mock data - replace with API call
-  const seniors = [
-    {
-      id: 1,
-      name: "Dr. Sarah Chen",
-      company: "Google",
-      position: "Senior Software Engineer",
-      location: "San Francisco, CA",
-      skills: ["React", "Node.js", "Machine Learning"],
-      connectionStatus: "pending",
-      avatar: "SC",
-    },
-    {
-      id: 2,
-      name: "Michael Rodriguez",
-      company: "Microsoft",
-      position: "Principal Engineer",
-      location: "Seattle, WA",
-      skills: ["Azure", ".NET", "Cloud Architecture"],
-      connectionStatus: null,
-      avatar: "MR",
-    },
-    {
-      id: 3,
-      name: "Priya Patel",
-      company: "Amazon",
-      position: "Engineering Manager",
-      location: "New York, NY",
-      skills: ["AWS", "Leadership", "System Design"],
-      connectionStatus: "connected",
-      avatar: "PP",
-    },
-  ];
-
+  const [seniors, setSeniors] = useState([]);
   const handleRequestReferral = (seniorId) => {
     navigate(`/request-referral/${seniorId}`);
   };
 
   const filteredSeniors = seniors.filter((senior) => {
     const matchesSearch =
-      senior.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      senior.company.toLowerCase().includes(searchTerm.toLowerCase());
+      senior.firstname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      senior.experience[0]?.company
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
     const matchesCompany =
-      !filters.company || senior.company === filters.company;
+      !filters.company ||
+      senior.experience?.some((exp) =>
+        exp.company.toLowerCase().includes(filters.company.toLowerCase())
+      );
+
     const matchesPosition =
-      !filters.position ||
-      senior.position.toLowerCase().includes(filters.position.toLowerCase());
+      !filters.jobRole ||
+      senior.experience?.some((exp) =>
+        exp.jobRole.toLowerCase().includes(filters.jobRole.toLowerCase())
+      );
+    console.log(matchesPosition);
     return matchesSearch && matchesCompany && matchesPosition;
   });
 
+  useEffect(() => {
+    const getSenior = async () => {
+      try {
+        const res = await axios.get(`${BACKEND_API}/api/user/`, {
+          withCredentials: true,
+        });
+        setSeniors(res.data);
+      } catch (error) {}
+    };
+    getSenior();
+  }, []);
   return (
     <>
       <div className=" bg-gray-50 p-6">
         <div>
-          <h1 className="text-3xl font-bold">Find Senior Professionals</h1>
+          <h1 className="text-xl md:text-3xl font-bold">Find Senior Professionals</h1>
           <p className="text-gray-600">
             Connect with experienced professionals who can refer you to top
             companies
@@ -109,18 +100,19 @@ const FindSenior = () => {
             </div>
             <div className="w-full border border-gray-300 flex justify-center rounded-md">
               <select
-                value={filters.position}
+                value={filters.jobRole}
                 onChange={(e) =>
-                  setFilters({ ...filters, position: e.target.value })
+                  setFilters({ ...filters, jobRole: e.target.value })
                 }
                 className="w-full pl-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                name="company"
-                id="company"
+                name="jobRole"
+                id="jobRole"
               >
                 <option value="">All Positions</option>
-                <option value="Engineering">Engineering</option>
+                <option value="Engineer">Engineer</option>
                 <option value="Management">Management</option>
                 <option value="Product">Product</option>
+                <option value="Software Engineer">Software Engineer</option>
               </select>
             </div>
           </div>
@@ -139,15 +131,23 @@ const FindSenior = () => {
                     </p>
                   </div>
                   <div className="w-full h-full">
-                    <h1 className="text-xl font-bold">{senior.name}</h1>
+                    <h1 className="text-xl font-bold">
+                      {senior.firstname} {senior.lastname}
+                    </h1>
                     <h3 className="text-sm text-gray-700 mt-2">
-                      {senior.position} at {senior.company}
+                      {senior.experience.length > 0
+                        ? `${
+                            senior.experience[0]?.jobRole
+                              ? senior.experience[0].jobRole
+                              : "Engineer"
+                          } at ${senior.experience[0].company}`
+                        : ""}
                     </h3>
                     <p className="text-sm text-gray-700 mt-2">
-                      {senior.location}
+                      {senior?.location?.city}, {senior?.location?.country}
                     </p>
                     <p className="flex gap-2 mt-2">
-                      {senior.skills.map((skill, index) => (
+                      {senior?.skills.map((skill, index) => (
                         <li
                           key={index}
                           className="text-xs font-semibold bg-gray-200 text-gray-700 list-none border  px-2 border-gray-200 shadow-sm  rounded-md"
@@ -158,7 +158,7 @@ const FindSenior = () => {
                     </p>
                     <div className="flex items-center gap-2 mt-4">
                       <button
-                      onClick={()=>handleRequestReferral(senior.id)}
+                        onClick={() => handleRequestReferral(senior.id)}
                         className={`text-sm  font-semibold px-3 py-2  rounded-md  ${
                           senior.connectionStatus === "pending"
                             ? "bg-gray-200 cursor-not-allowed text-gray-600"
@@ -197,7 +197,7 @@ const FindSenior = () => {
                 No professionals found
               </h3>
               <p className="mt-1 text-gray-500">
-              Hey {user?.name} try adjusting your search or filters
+                Hey {user?.name} try adjusting your search or filters
               </p>
             </div>
           )}

@@ -48,7 +48,10 @@ const JuniorDashboard = () => {
       <div className="flex justify-between w-full h-12 mb-8">
         <div>
           <h2 className="text-xl md:text-3xl font-bold">
-            Welcome <span className="text-indigo-600">{user?.firstname + " " + user?.lastname || "Junior"}</span>
+            Welcome{" "}
+            <span className="text-indigo-600">
+              {user?.firstname + " " + user?.lastname || "Junior"}
+            </span>
           </h2>
           <p className="text-gray-600">
             Track your referral requests and progress
@@ -82,33 +85,35 @@ const JuniorDashboard = () => {
         <h1 className="text-xl font-semibold text-gray-600 p-6">
           Your Recent Request
         </h1>
-        <div className="bg-gray-50 flex  justify-between py-2 text-xs text-gray-600 uppercase font-semibold">
-          <h3 className="w-full px-6">Company</h3>
-          <h3 className="w-full px-6">Position</h3>
-          <h3 className="w-full px-6">Status</h3>
-          <h3 className=" w-full px-6">Date</h3>
-        </div>
-        {recentRequests.map((request) => (
-          <div
-            key={request.id}
-            className="flex  justify-between text-sm text-gray-400 border-b border-gray-300 py-4"
-          >
-            <h3 className="w-full text-gray-800 px-6">{request.company}</h3>
-            <h3 className="w-full px-6">{request.position}</h3>
-            <h3
-              className={`w-full px-6 font-semibold ${
-                request.status === "Accepted"
-                  ? "text-green-800"
-                  : request.status === "Rejected"
-                  ? " text-red-800"
-                  : " text-yellow-500"
-              }`}
-            >
-              {request.status}
-            </h3>
-            <h3 className=" w-full px-2 sm:px-6">{request.date}</h3>
+        <div className="overflow-auto">
+          <div className="bg-gray-50 flex  justify-between py-2 text-xs text-gray-600 uppercase font-semibold">
+            <h3 className="w-full px-6">Company</h3>
+            <h3 className="w-full px-6">Position</h3>
+            <h3 className="w-full px-6">Status</h3>
+            <h3 className=" w-full px-6">Date</h3>
           </div>
-        ))}
+          {recentRequests.map((request) => (
+            <div
+              key={request.id}
+              className="flex  justify-between text-sm text-gray-400 border-b border-gray-300 py-4"
+            >
+              <h3 className="w-full text-gray-800 px-6">{request.company}</h3>
+              <h3 className="w-full px-6">{request.position}</h3>
+              <h3
+                className={`w-full px-6 font-semibold ${
+                  request.status === "Accepted"
+                    ? "text-green-800"
+                    : request.status === "Rejected"
+                    ? " text-red-800"
+                    : " text-yellow-500"
+                }`}
+              >
+                {request.status}
+              </h3>
+              <h3 className=" w-full px-2 sm:px-6">{request.date}</h3>
+            </div>
+          ))}
+        </div>
       </div>
       <button className="bg-indigo-600 w-55 text-white font-semibold rounded-md px-3 ml-[25%] sm:ml-[35%] md:ml-[40%] py-2 cursor-pointer mt-8">
         <Link to={"/find-senior"}>Request New Referral</Link>

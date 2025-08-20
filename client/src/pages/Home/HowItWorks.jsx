@@ -7,7 +7,7 @@ const HowItWorks = () => {
       className="w-full h-50% flex flex-col items-center "
     >
       <h1 className="font-bold text-3xl mt-16">How ReferrLink Works</h1>
-      <div className="flex  flex-col md:flex-row justify-between items-start gap-8 p-16">
+      <div className="flex  flex-col md:flex-row justify-between items-start gap-8 px-4 py-6 md:p-16">
         <div className="h-full w-full bg-gray-100  rounded-xl flex flex-col items-start p-6 shadow-md hover:shadow-lg duration-300">
           <h5 className="border w-12 h-12 p-2 pl-4 text-2xl rounded-full font-semibold text-indigo-500 bg-indigo-100 border-none mb-3">
             1

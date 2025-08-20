@@ -10,7 +10,7 @@ const WhyChooseReferrLink = () => {
       <h1 className="text-center font-bold text-3xl pt-12">
         Why Choose ReferrLink
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 p-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 px-2 py-3  md:p-12">
         <div className="flex items-center p-2 gap-2">
           <MdOutlineDone className="w-12 h-12 p-2 bg-indigo-100 rounded-md text-indigo-500" />
           <div className="flex flex-col">

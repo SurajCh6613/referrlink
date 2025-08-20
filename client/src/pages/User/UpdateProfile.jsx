@@ -119,10 +119,10 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 md:p-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-8 px-2">
           <h1 className="text-3xl font-bold text-gray-900">
             Update Your Profile
           </h1>
@@ -538,7 +538,7 @@ const UpdateProfile = () => {
                       </label>
                       <input
                         type="text"
-                        defaultValue=""
+                        defaultValue={edu.degree}
                         name="Edu.degree"
                         onChange={(e) => handleEducationChange(index, e)}
                         required
@@ -552,7 +552,7 @@ const UpdateProfile = () => {
                       </label>
                       <input
                         type="text"
-                        defaultValue=""
+                        defaultValue={edu.institution}
                         name="Edu.institution"
                         required
                         onChange={(e) => handleEducationChange(index, e)}
@@ -567,7 +567,11 @@ const UpdateProfile = () => {
                     </label>
                     <input
                       type="date"
-                      defaultValue=""
+                      defaultValue={
+                        edu.year
+                          ? new Date(edu.year).toISOString().split("T")[0]
+                          : ""
+                      }
                       required
                       name="Edu.year"
                       placeholder="2025"

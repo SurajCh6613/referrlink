@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <section className="w-full h-full bg-gray-800">
-      <div className=" flex flex-col p-12">
-        <div className="grid sm:grid-cols-1 md:grid-cols-4 mb-6">
+      <div className=" flex flex-col px-4 py-4 md:p-12">
+        <div className="grid grid-cols-2  sm:grid-cols-1 md:grid-cols-4 mb-6">
           <div>
             <div className="w-full h-full p-2">
               <h3 className="text-white font-bold text-xl mb-3">RefferLink</h3>
