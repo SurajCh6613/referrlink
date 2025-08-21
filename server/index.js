@@ -23,6 +23,10 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/referral", referralRoutes);
 
+app.get("/", (req, res) => {
+  res.send("Welcome to ReferrLink server");
+});
+
 app.listen(PORT, () => {
   console.log(`Server is listening at ${PORT}`);
 });
