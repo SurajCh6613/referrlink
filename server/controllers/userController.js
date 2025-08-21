@@ -49,12 +49,12 @@ const registerUser = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "None",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(201).json({ user: newUser });
   } catch (error) {
     console.log(error);
-
     logger.error("Register Error:", error.message);
     res.status(500).json({ message: "Server Error" });
   }
@@ -82,6 +82,7 @@ const loginUser = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "None",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.status(201).json({ user: user });
@@ -97,6 +98,7 @@ const logoutUser = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "None",
+      path: "/",
       expires: new Date(0),
     });
     res.json({ message: "Logout Successfully" });
