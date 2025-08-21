@@ -147,6 +147,7 @@ const Login = () => {
                 onChange={onChangeHandler}
               />
               <button
+                type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-4 top-9 text-xl cursor-pointer z-10"
               >
