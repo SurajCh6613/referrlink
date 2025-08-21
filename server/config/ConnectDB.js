@@ -3,7 +3,6 @@ const logger = require("../Logger/logger");
 
 const ConnectDB = async () => {
   try {
-    logger.info(process.env.MONGODB_CONNECTION_STRING);
     await mongoose.connect(process.env.MONGODB_CONNECTION_STRING);
     console.log("DB Connected successfully");
   } catch (error) {
