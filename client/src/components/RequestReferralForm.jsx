@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import BACKEND_API from "../config/config";
+import { useNavigate } from "react-router-dom";
 
 const RequestReferralForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     jobRole: "",
     company: "",
@@ -10,9 +12,9 @@ const RequestReferralForm = () => {
     message: "",
   });
 
-  const onSubmitHandler = async(e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    const response = await axios.post(`${BACKEND_API}/referral/`)
+    const response = await axios.post(`${BACKEND_API}/referral/`);
   };
 
   const onChangeHandler = (e) => {
@@ -87,6 +89,7 @@ const RequestReferralForm = () => {
           <div className="flex justify-end gap-2">
             <button
               type="button"
+              onClick={() => navigate("/find-senior")}
               className=" border border-gray-600 px-2 py-1 font-semibold rounded-md hover:text-white hover:bg-gray-700 duration-300 cursor-pointer hover:scale-105"
             >
               Cancel

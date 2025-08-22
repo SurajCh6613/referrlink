@@ -27,6 +27,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to ReferrLink server");
 });
 
+
 app.listen(PORT, () => {
   console.log(`Server is listening at ${PORT}`);
 });
