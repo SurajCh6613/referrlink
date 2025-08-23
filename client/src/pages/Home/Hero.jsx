@@ -9,8 +9,8 @@ const Hero = () => {
   return (
     <div className="">
       {/* Home Section */}
-      <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-2 md:pb-12 sm:p-4">
-        <div className="flex flex-col-reverse sm:flex-row h-full w-full items-center justify-around pt-4 pl-4 pr-4">
+      <div className="bg-indigo-500 p-2 md:pb-12 sm:p-4">
+        <div className="flex flex-col-reverse sm:flex-row z-10 h-full w-full items-center pt-4 pl-4 pr-4">
           <div className="w-full sm:w-2/3">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 md:mb-10 flex flex-col gap-4">
               <span>Bridge the Gap Between</span>{" "}

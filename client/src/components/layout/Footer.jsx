@@ -13,6 +13,26 @@ const Footer = () => {
                 Connecting talent with opportunity through professional
                 referrals.
               </p>
+              <div className="mt-4 flex gap-4 text-gray-400">
+                <a
+                  href="https://github.com/SurajCh6613"
+                  className="hover:text-white"
+                >
+                  GitHub
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/surajch6613"
+                  className="hover:text-white"
+                >
+                  LinkedIn
+                </a>
+                <a
+                  href="mailto:surajchaudhary6613@gmail.com"
+                  className="hover:text-white"
+                >
+                  Contact
+                </a>
+              </div>
             </div>
           </div>
           <div className="w-full h-full p-3">

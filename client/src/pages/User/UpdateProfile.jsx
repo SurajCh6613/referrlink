@@ -3,8 +3,8 @@ import { useUser } from "../../context/UserContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaLinkedin, FaGithub } from "react-icons/fa";
-import MyProfile from "./MyProfile";
 import BACKEND_API from "../../config/config";
+import toast from "react-hot-toast";
 
 const UpdateProfile = () => {
   const { user, setUser } = useUser();
@@ -112,9 +112,10 @@ const UpdateProfile = () => {
         withCredentials: true,
       });
       setUser(response.data.user);
+      toast.success("Profile Updated Successfully.");
       navigate("/myProfile");
     } catch (error) {
-      console.log(error);
+      toast.error(error || "Something went wrong!");
     }
   };
 

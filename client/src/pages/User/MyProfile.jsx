@@ -123,7 +123,7 @@ const MyProfile = () => {
                 </div>
 
                 {user.experience.length > 0 ? (
-                  user.experience.map((exp,index) => (
+                  user.experience.map((exp, index) => (
                     <div
                       key={index}
                       className="bg-white shadow-md rounded-xl p-4 border border-gray-300 hover:shadow-lg transition-shadow mb-2"
@@ -194,10 +194,14 @@ const MyProfile = () => {
           {/* Form Actions */}
           <div className="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
             <Link
-              to={"/"}
+              to={
+                user.role === "junior"
+                  ? "/junior-dashboard"
+                  : "/senior-dashboard"
+              }
               className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Go to Homepage
+              Go to Dashboard
             </Link>
             <Link
               to={"/update-profile"}

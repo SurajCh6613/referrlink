@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
 import { useUser } from "../../context/UserContext";
-import { toast } from "react-toastify";
 import BACKEND_API from "../../config/config";
+import toast from "react-hot-toast";
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
@@ -37,6 +37,7 @@ const Login = () => {
         }
       );
       setUser(response.data.user);
+      toast.success("Logged In Successfully");
       formData.role === "junior"
         ? navigate("/junior-dashboard")
         : navigate("/senior-dashboard");

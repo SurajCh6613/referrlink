@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdSearch } from "react-icons/md";
 import { useUser } from "../context/UserContext";
 import { TbMoodSad } from "react-icons/tb";
@@ -58,7 +58,9 @@ const FindSenior = () => {
     <>
       <div className=" bg-gray-50 p-6">
         <div>
-          <h1 className="text-xl md:text-3xl font-bold">Find Senior Professionals</h1>
+          <h1 className="text-xl md:text-3xl font-bold">
+            Find Senior Professionals
+          </h1>
           <p className="text-gray-600">
             Connect with experienced professionals who can refer you to top
             companies
@@ -88,7 +90,7 @@ const FindSenior = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, company: e.target.value })
                 }
-                className="w-full pl-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full pl-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 name="company"
                 id="company"
               >
@@ -104,7 +106,7 @@ const FindSenior = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, jobRole: e.target.value })
                 }
-                className="w-full pl-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full pl-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 name="jobRole"
                 id="jobRole"
               >
@@ -158,7 +160,7 @@ const FindSenior = () => {
                     </p>
                     <div className="flex items-center gap-2 mt-4">
                       <button
-                        onClick={() => handleRequestReferral(senior.id)}
+                        onClick={() => handleRequestReferral(senior._id)}
                         className={`text-sm  font-semibold px-3 py-2  rounded-md  ${
                           senior.connectionStatus === "pending"
                             ? "bg-gray-200 cursor-not-allowed text-gray-600"
@@ -169,9 +171,12 @@ const FindSenior = () => {
                           ? "Request Sent"
                           : "Request Referral"}
                       </button>
-                      <button className="text-sm   bg-gray-50 border-gray-400 cursor-pointer font-semibold px-3 py-2 hover:bg-gray-100 rounded-md border">
+                      <Link
+                        to={`/user/${senior._id}`}
+                        className="text-sm   bg-gray-50 border-gray-400 cursor-pointer font-semibold px-3 py-2 hover:bg-gray-100 rounded-md border"
+                      >
                         View Profile
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
