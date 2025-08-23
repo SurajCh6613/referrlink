@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { Link } from "react-router-dom";
 import Spinner from "../../components/layout/Spinner";
+import axios from "axios";
+import BACKEND_API from "../../config/config";
+import toast from "react-hot-toast";
 
 const JuniorDashboard = () => {
   const { user, loading } = useUser();
@@ -18,30 +21,22 @@ const JuniorDashboard = () => {
     },
     { title: "Rejected Requests", value: 1, color: "bg-red-100 text-red-800" },
   ];
+  const [recentRequests, setRecentRequest] = useState(0);
 
-  const recentRequests = [
-    {
-      id: 1,
-      company: "Google",
-      position: "Software Engineer",
-      status: "Pending",
-      date: "2023-08-15",
-    },
-    {
-      id: 2,
-      company: "Amazon",
-      position: "Frontend Developer",
-      status: "Accepted",
-      date: "2023-08-10",
-    },
-    {
-      id: 3,
-      company: "Amazon",
-      position: "Frontend Developer",
-      status: "Rejected",
-      date: "2023-08-10",
-    },
-  ];
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_API}/api/referral/sent`, {
+          withCredentials: true,
+        });
+        setRecentRequest(response.data.referralRequests);
+      } catch (error) {
+        toast.error("Something went wrong");
+      }
+    };
+    fetchRequests();
+  }, []);
+
   if (loading) return <Spinner />;
   return (
     <section className="p-6 bg-gray-50">
@@ -92,27 +87,33 @@ const JuniorDashboard = () => {
             <h3 className="w-full px-6">Status</h3>
             <h3 className=" w-full px-6">Date</h3>
           </div>
-          {recentRequests.map((request) => (
-            <div
-              key={request.id}
-              className="flex  justify-between text-sm text-gray-400 border-b border-gray-300 py-4"
-            >
-              <h3 className="w-full text-gray-800 px-6">{request.company}</h3>
-              <h3 className="w-full px-6">{request.position}</h3>
-              <h3
-                className={`w-full px-6 font-semibold ${
-                  request.status === "Accepted"
-                    ? "text-green-800"
-                    : request.status === "Rejected"
-                    ? " text-red-800"
-                    : " text-yellow-500"
-                }`}
+          {recentRequests.length > 0 ? (
+            recentRequests.map((request, index) => (
+              <div
+                key={index}
+                className="flex  justify-between text-sm text-gray-400 border-b border-gray-300 py-4"
               >
-                {request.status}
-              </h3>
-              <h3 className=" w-full px-2 sm:px-6">{request.date}</h3>
+                <h3 className="w-full text-gray-800 px-6">{request.company}</h3>
+                <h3 className="w-full px-6">{request.jobRole}</h3>
+                <h3
+                  className={`w-full px-6 font-semibold ${
+                    request.status === "Accepted"
+                      ? "text-green-800"
+                      : request.status === "Rejected"
+                      ? " text-red-800"
+                      : " text-yellow-500"
+                  }`}
+                >
+                  {request.status}
+                </h3>
+                <h3 className=" w-full px-2 sm:px-6">{new Date(request.updatedAt).toLocaleDateString()}</h3>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-8 text-2xl text-gray-700">
+              No Request
             </div>
-          ))}
+          )}
         </div>
       </div>
       <button className="bg-indigo-600 w-55 text-white font-semibold rounded-md px-3 ml-[25%] sm:ml-[35%] md:ml-[40%] py-2 cursor-pointer mt-8">

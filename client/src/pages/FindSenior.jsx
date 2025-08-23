@@ -46,7 +46,7 @@ const FindSenior = () => {
   useEffect(() => {
     const getSenior = async () => {
       try {
-        const res = await axios.get(`${BACKEND_API}/api/user/`, {
+        const res = await axios.get(`${BACKEND_API}/api/user`, {
           withCredentials: true,
         });
         setSeniors(res.data);

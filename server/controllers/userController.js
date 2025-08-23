@@ -108,9 +108,19 @@ const logoutUser = async (req, res) => {
   }
 };
 
-const getUser = async (req, res) => {
+const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (error) {
+    logger.error("Get User Error:", error.message);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
     res.json(user);
   } catch (error) {
     logger.error("Get User Error:", error.message);
@@ -130,8 +140,8 @@ const allUsers = async (req, res) => {
 
 const getSeniors = async (req, res) => {
   try {
-    const user = await User.find({ role: "senior" }).select("-password");
-    res.json(user);
+    const seniors = await User.find({ role: "senior" }).select("-password");
+    res.json(seniors);
   } catch (error) {
     logger.error("Get Senior Error:", error.message);
     res.status(500).json({ message: error.message });
@@ -256,6 +266,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
+  getMe,
   getUser,
   allUsers,
   getSeniors,

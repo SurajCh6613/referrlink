@@ -6,7 +6,6 @@ const logger = require("../Logger/logger");
 
 const requestReferral = async (req, res) => {
   try {
-    console.log(req.user._id);
     const { message, status, company, jobRole, resumeUrl } = req.body;
     if (!company) {
       return res.status(401).json({ message: "Company required" });
@@ -21,6 +20,13 @@ const requestReferral = async (req, res) => {
       return res.status(401).json({ message: "message required" });
     }
     const senior = await User.findById(req.params.id);
+    if (!senior || senior.role !== "senior") {
+      return res.status(400).json({ message: "Invalid senior user" });
+    }
+    // Check if junior tried to request referral to self
+    if (senior._id.toString() === req.user._id.toString()) {
+      return res.status(400).json({ message: "Senior and junior same" });
+    }
     // If junior already sent request to senior
     const existingRequest = await ReferralRequest.findOne({
       senderId: senior._id,
@@ -29,13 +35,7 @@ const requestReferral = async (req, res) => {
     if (existingRequest) {
       return res.status(401).json({ message: "Request already sent" });
     }
-    // Check if junior tried to request referral to self
-    if (senior._id.toString() === req.user._id.toString()) {
-      return res.status(400).json({ message: "Senior and junior same" });
-    }
-    if (!senior || senior.role !== "senior") {
-      return res.status(400).json({ message: "Invalid senior user" });
-    }
+
     const newReferralRequest = await new ReferralRequest({
       senderId: req.user._id,
       recieverId: senior._id,

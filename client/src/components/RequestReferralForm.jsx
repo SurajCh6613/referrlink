@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
 import BACKEND_API from "../config/config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const RequestReferralForm = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [formData, setFormData] = useState({
     jobRole: "",
     company: "",
@@ -14,7 +16,23 @@ const RequestReferralForm = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    const response = await axios.post(`${BACKEND_API}/referral/`);
+    try {
+      const response = await axios.post(
+        `${BACKEND_API}/api/referral/request/${id}`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      toast.success("Referral Request Sent Successfully");
+      navigate(`/junior-dashboard`);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          error?.message ||
+          "Something went wrong!"
+      );
+    }
   };
 
   const onChangeHandler = (e) => {
@@ -37,7 +55,7 @@ const RequestReferralForm = () => {
             <input
               type="text"
               name="jobRole"
-              value={formData.value}
+              value={formData.jobRole}
               onChange={onChangeHandler}
               className="border border-gray-200 shadow-sm w-full rounded-sm py-2 px-2"
               placeholder="Software Engineer"
@@ -51,7 +69,7 @@ const RequestReferralForm = () => {
             <input
               type="text"
               name="company"
-              value={formData.value}
+              value={formData.company}
               onChange={onChangeHandler}
               className="border border-gray-200 shadow-sm w-full rounded-sm py-2 px-2"
               required
@@ -65,7 +83,7 @@ const RequestReferralForm = () => {
             <input
               type="text"
               name="resumeUrl"
-              value={formData.value}
+              value={formData.resumeUrl}
               onChange={onChangeHandler}
               className="border border-gray-200 shadow-sm w-full rounded-sm py-2 px-2"
               required
@@ -79,7 +97,7 @@ const RequestReferralForm = () => {
             <textarea
               type="text"
               name="message"
-              value={formData.value}
+              value={formData.message}
               onChange={onChangeHandler}
               className="border border-gray-200 shadow-sm w-full rounded-sm py-2 px-2"
               required
