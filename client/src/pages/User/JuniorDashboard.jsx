@@ -8,20 +8,27 @@ import toast from "react-hot-toast";
 
 const JuniorDashboard = () => {
   const { user, loading } = useUser();
+  const [recentRequests, setRecentRequest] = useState([]);
+  const pendingRequest = recentRequests.filter((r) => r.status == "pending");
+  const acceptedRequest = recentRequests.filter((r) => r.status == "accepted");
+  const rejectedRequest = recentRequests.filter((r) => r.status == "rejected");
   const stats = [
     {
       title: "Pending Requests",
-      value: 3,
+      value: pendingRequest.length,
       color: "bg-yellow-100 text-yellow-800",
     },
     {
       title: "Accepted Referrals",
-      value: 5,
+      value: acceptedRequest.length,
       color: "bg-green-100 text-green-800",
     },
-    { title: "Rejected Requests", value: 1, color: "bg-red-100 text-red-800" },
+    {
+      title: "Rejected Requests",
+      value: rejectedRequest.length,
+      color: "bg-red-100 text-red-800",
+    },
   ];
-  const [recentRequests, setRecentRequest] = useState(0);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -106,7 +113,9 @@ const JuniorDashboard = () => {
                 >
                   {request.status}
                 </h3>
-                <h3 className=" w-full px-2 sm:px-6">{new Date(request.updatedAt).toLocaleDateString()}</h3>
+                <h3 className=" w-full px-2 sm:px-6">
+                  {new Date(request.updatedAt).toLocaleDateString()}
+                </h3>
               </div>
             ))
           ) : (

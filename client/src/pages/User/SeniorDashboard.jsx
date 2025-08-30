@@ -1,19 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import Spinner from "../../components/layout/Spinner";
+import axios from "axios";
+import BACKEND_API from "../../config/config";
 
 const SeniorDashboard = () => {
   const { user, loading } = useUser();
   // Mock data - replace with real data from your API
+  const [recentRequests, setRecentRequest] = useState([]);
+  const pendingRequests = recentRequests.filter((r) => r.status == "pending");
+  const acceptedRequest = recentRequests.filter((r) => r.status == "accepted");
+  const rejectedRequest = recentRequests.filter((r) => r.status == "rejected");
+  console.log(recentRequests);
+  useEffect(() => {
+    const fetchRequests = async () => {
+      const res = await axios.get(`${BACKEND_API}/api/referral/`, {
+        withCredentials: true,
+      });
+      setRecentRequest(res.data.referralRequests);
+    };
+    fetchRequests();
+  }, []);
   const stats = [
     {
       title: "Pending Requests",
-      value: 4,
+      value: pendingRequests.length,
       color: "bg-yellow-100 text-yellow-800",
     },
     {
       title: "Referrals Given",
-      value: 12,
+      value: acceptedRequest.length,
       color: "bg-green-100 text-green-800",
     },
     {
@@ -23,22 +39,36 @@ const SeniorDashboard = () => {
     },
   ];
 
-  const pendingRequests = [
-    {
-      id: 1,
-      name: "Alex Johnson",
-      company: "Google",
-      position: "SWE II",
-      date: "2023-08-18",
-    },
-    {
-      id: 2,
-      name: "Sam Wilson",
-      company: "Microsoft",
-      position: "Product Manager",
-      date: "2023-08-17",
-    },
-  ];
+  // const pendingRequests = [
+  //   {
+  //     id: 1,
+  //     name: "Alex Johnson",
+  //     company: "Google",
+  //     position: "SWE II",
+  //     date: "2023-08-18",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Sam Wilson",
+  //     company: "Microsoft",
+  //     position: "Product Manager",
+  //     date: "2023-08-17",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Sam Wilson",
+  //     company: "Microsoft",
+  //     position: "Product Manager",
+  //     date: "2023-08-17",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Sam Wilson",
+  //     company: "Microsoft",
+  //     position: "Product Manager",
+  //     date: "2023-08-17",
+  //   },
+  // ];
   if (!user && loading) return <Spinner />;
   return (
     <>
@@ -83,36 +113,42 @@ const SeniorDashboard = () => {
               {pendingRequests.length} new
             </span>
           </div>
-          <div className="divide-y divide-gray-200">
-            {pendingRequests.map((request) => (
-              <div
-                key={request.id}
-                className="p-6 hover:bg-gray-50 transition-colors"
-              >
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">
-                      {request.name}
-                    </h3>
-                    <p className="text-gray-600">
-                      {request.position} at {request.company}
-                    </p>
+          <div className="h-76 overflow-auto divide-gray-200">
+            {pendingRequests.length > 0 ? (
+              pendingRequests.map((request) => (
+                <div
+                  key={request._id}
+                  className="p-6 hover:bg-gray-50 transition-colors"
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-lg font-medium text-gray-900">
+                        {request.senderId.firstname} {request.senderId.lastname}
+                      </h3>
+                      <p className="text-gray-600">
+                        {request.jobRole} at {request.company}
+                      </p>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {new Date(request.createdAt).toDateString()}
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-500">{request.date}</span>
+                  <div className="mt-4 flex space-x-3">
+                    <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                      Accept
+                    </button>
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                      Decline
+                    </button>
+                    <button className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
+                      View Profile
+                    </button>
+                  </div>
                 </div>
-                <div className="mt-4 flex space-x-3">
-                  <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                    Accept
-                  </button>
-                  <button className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                    Decline
-                  </button>
-                  <button className="border border-gray-300 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md text-sm font-medium transition-colors">
-                    View Profile
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>Pending</p>
+            )}
           </div>
         </div>
 

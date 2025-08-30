@@ -79,7 +79,7 @@ const recievedRequests = async (req, res) => {
   try {
     const requests = await referralRequestSchema.find({
       recieverId: req.user._id,
-    });
+    }).populate("senderId","firstname lastname experience.company experience.jobRole");
     if (!requests) {
       return res.status(200).json({ message: "No request found" });
     }
