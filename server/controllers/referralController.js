@@ -59,12 +59,18 @@ const sentReferrals = async (req, res) => {
   try {
     const requests =
       req.user.role === "junior"
-        ? await referralRequestSchema.find({
-            senderId: req.user._id,
-          })
-        : await referralRequestSchema.find({
-            recieverId: req.user._id,
-          });
+        ? await referralRequestSchema
+            .find({
+              senderId: req.user._id,
+            })
+            .sort({ updatedAt: -1 })
+            .limit(10)
+        : await referralRequestSchema
+            .find({
+              recieverId: req.user._id,
+            })
+            .sort({ updatedAt: -1 })
+            .limit(10);
     if (!requests) {
       return res.status(200).json({ message: "No request found" });
     }
@@ -77,9 +83,14 @@ const sentReferrals = async (req, res) => {
 
 const recievedRequests = async (req, res) => {
   try {
-    const requests = await referralRequestSchema.find({
-      recieverId: req.user._id,
-    }).populate("senderId","firstname lastname experience.company experience.jobRole");
+    const requests = await referralRequestSchema
+      .find({
+        recieverId: req.user._id,
+      })
+      .populate(
+        "senderId",
+        "firstname lastname experience.company experience.jobRole"
+      );
     if (!requests) {
       return res.status(200).json({ message: "No request found" });
     }
@@ -105,6 +116,7 @@ const referralResponse = async (req, res) => {
         $set: {
           status,
           responseMessage: responseMessage || "",
+          responsedAt: new Date(),
         },
       },
       { new: true }
@@ -116,9 +128,49 @@ const referralResponse = async (req, res) => {
   }
 };
 
+const getAverageResponseTime = async (req, res) => {
+  try {
+    const seniorId = req.user._id;
+    // Fetching all responsed referral request
+    const requests = await referralRequestSchema.find({
+      recieverId: seniorId,
+      status: { $in: ["accepted", "rejected"] },
+      responsedAt: { $ne: null },
+    });
+    if (requests.length === 0) {
+      return res.status(200).json({
+        success: true,
+        avgResponseTime: { minutes: 0, hours: 0, days: 0 },
+      });
+    }
+    // Calculating response time
+    let totalResponseTime = 0;
+    requests.forEach(
+      (req) => (totalResponseTime += req.responsedAt - req.createdAt)
+    );
+
+    // 3. Average
+    const avgResponseTime = totalResponseTime / requests.length;
+
+    // 4. Convert to readable format
+    const minutes = Math.round(avgResponseTime / (1000 * 60));
+    const hours = Math.round(avgResponseTime / (1000 * 60 * 60));
+    const days = Math.round(avgResponseTime / (1000 * 60 * 60 * 24));
+
+    return res.status(200).json({
+      success: true,
+      avgResponseTime: { minutes, hours, days },
+    });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 module.exports = {
   requestReferral,
   sentReferrals,
   recievedRequests,
   referralResponse,
+  getAverageResponseTime,
 };

@@ -22,6 +22,7 @@ const referralRequestSchema = mongoose.Schema(
       default: "pending",
     },
     responseMessage: { type: String },
+    responsedAt: { type: Date },
   },
   { timestamps: true }
 );
