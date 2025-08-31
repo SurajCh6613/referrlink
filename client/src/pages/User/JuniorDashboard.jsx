@@ -84,7 +84,7 @@ const JuniorDashboard = () => {
 
       {/* Recent Request */}
       <div className="w-full h-full bg-white rounded-md mt-12 shadow-sm">
-        <h1 className="text-xl font-semibold text-gray-600 p-6">
+        <h1 className="text-xl font-semibold text-gray-600 px-6 py-4">
           Your Recent Request
         </h1>
         <div className="overflow-auto">
@@ -104,10 +104,10 @@ const JuniorDashboard = () => {
                 <h3 className="w-full px-6">{request.jobRole}</h3>
                 <h3
                   className={`w-full px-6 font-semibold ${
-                    request.status === "Accepted"
-                      ? "text-green-800"
-                      : request.status === "Rejected"
-                      ? " text-red-800"
+                    request.status === "accepted"
+                      ? "text-green-700"
+                      : request.status === "rejected"
+                      ? " text-red-500"
                       : " text-yellow-500"
                   }`}
                 >
