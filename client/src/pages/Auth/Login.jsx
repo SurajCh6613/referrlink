@@ -185,7 +185,7 @@ const Login = () => {
                 </div>
               </>
             )}
-            <button className="bg-indigo-500 w-full py-3 mt-2 rounded-md hover:bg-indigo-400 duration-300 text-white font-semibold">
+            <button className="bg-indigo-500 w-full py-3 mt-2 rounded-md hover:bg-indigo-600 duration-300 text-white font-semibold cursor-pointer">
               {isLogin ? "Login" : "Register"}
             </button>
           </form>
