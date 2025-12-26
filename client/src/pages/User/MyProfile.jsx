@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 const MyProfile = () => {
   const { user } = useUser();
+  console.log(user);
   return (
     <div className="min-h-screen bg-gray-50 md:p-6">
       <div className="max-w-4xl mx-auto">
@@ -137,7 +138,7 @@ const MyProfile = () => {
                       </h3>
 
                       <p className="text-sm text-gray-400">
-                        {exp.from
+                        {exp?.from
                           ? new Date(exp.from).toLocaleDateString()
                           : "YYYY"}{" "}
                         -{" "}

@@ -61,7 +61,6 @@ const UpdateProfile = () => {
       },
     ]);
   };
-  console.log(educationFormData);
   const removeEducation = (index) => {
     setEducationFormData((prev) => prev.filter((_, i) => i !== index));
   };
@@ -303,7 +302,10 @@ const UpdateProfile = () => {
 
           {/* Skills */}
           <div className="p-6">
-            <h3 className="text-xl font-semibold">Your Skills</h3>
+            <h3 className="text-xl font-semibold">
+              Your Skills{" "}
+              <span className="text-gray-500">(Comma seperated)</span>
+            </h3>
             <div className="mt-1">
               <div className="flex flex-wrap gap-2">
                 {user?.profile?.skills.map((skill) => (
@@ -454,9 +456,9 @@ const UpdateProfile = () => {
                       </label>
                       <input
                         type="date"
-                        defaultValue={
-                          exp.from
-                            ? new Date(exp?.from).toISOString().split("T")[0]
+                         defaultValue={
+                          exp?.from
+                            ? new Date(exp.from).toISOString().split("T")[0]
                             : ""
                         }
                         required
@@ -473,8 +475,8 @@ const UpdateProfile = () => {
                       <input
                         type="date"
                         defaultValue={
-                          exp.from
-                            ? new Date(exp?.to).toISOString().split("T")[0]
+                          exp?.to
+                            ? new Date(exp.to).toISOString().split("T")[0]
                             : ""
                         }
                         name="Exp.to"
@@ -581,7 +583,10 @@ const UpdateProfile = () => {
                     />
                   </div>
                   <div className="flex justify-end mt-1">
-                    <button className="text-red-500 cursor-pointer">
+                    <button
+                      onClick={() => removeEducation(index)}
+                      className="text-red-500 cursor-pointer"
+                    >
                       Remove Education
                     </button>
                   </div>

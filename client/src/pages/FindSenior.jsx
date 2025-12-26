@@ -39,7 +39,6 @@ const FindSenior = () => {
       senior.experience?.some((exp) =>
         exp.jobRole.toLowerCase().includes(filters.jobRole.toLowerCase())
       );
-    console.log(matchesPosition);
     return matchesSearch && matchesCompany && matchesPosition;
   });
 
