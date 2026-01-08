@@ -52,7 +52,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center w-full h-full bg-gray-50 md:px-12 py-8">
+      <div className="flex items-center justify-center w-full min-h-screen pt-18 h-full bg-gray-50 md:px-12 py-8">
         <div className="flex flex-col gap-3 justify-between w-112 h-full rounded-md shadow-md px-10 py-2">
           <h3 className="text-3xl text-center font-semibold">
             Welcome back to Referr<span className="text-indigo-600">Link</span>

@@ -1,1 +1,23 @@
-@import 'tailwindcss'
+@import 'tailwindcss';
+
+
+/* Floating cards */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+    animation: float 3s ease-in-out infinite 1.5s;
+}
