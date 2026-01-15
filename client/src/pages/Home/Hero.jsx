@@ -107,29 +107,23 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Hero() {
   const navigate = useNavigate();
   const stats = [
-    { number: "10,000+", label: "Successful Referrals", icon: CheckCircle },
-    { number: "5,000+", label: "Active Professionals", icon: Users },
+    { number: "100+", label: "Successful Referrals", icon: CheckCircle },
+    { number: "500+", label: "Active Professionals", icon: Users },
     { number: "100+", label: "Top Companies", icon: Building2 },
   ];
 
-  const features = [
-    "Verified professional network",
-    "AI-powered job matching",
-    "Referral bonus tracking",
-    "Career growth insights",
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
-      <div className="pt-24 sm:pt-28 pb-8 sm:pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="section-padding">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <div className="space-y-4 sm:space-y-4">
               <div className="inline-flex items-center space-x-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium">
                 <TrendingUp className="w-4 h-4" />
-                <span>Trusted by 100+ leading companies</span>
+                <span>Trusted by 100+ professionals</span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
@@ -161,18 +155,7 @@ export default function Hero() {
                 </button>
               </div>
 
-              {/* Features List */}
-              {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4">
-                {features.map((feature, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center space-x-2 text-gray-700"
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                    <span className="text-sm sm:text-base">{feature}</span>
-                  </div>
-                ))}
-              </div> */}
+  
             </div>
 
             {/* Right Visual */}

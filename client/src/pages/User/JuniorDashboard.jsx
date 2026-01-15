@@ -46,7 +46,7 @@ const JuniorDashboard = () => {
 
   if (loading) return <Spinner />;
   return (
-    <section className="p-6 bg-gray-50">
+    <section className="p-6 section-padding bg-gray-50">
       <div className="flex justify-between w-full h-12 mb-8">
         <div>
           <h2 className="text-xl md:text-3xl font-bold">

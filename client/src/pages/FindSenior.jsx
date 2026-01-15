@@ -55,7 +55,7 @@ const FindSenior = () => {
   }, []);
   return (
     <>
-      <div className=" bg-gray-50 p-6">
+      <div className=" bg-gray-50 section-padding">
         <div>
           <h1 className="text-xl md:text-3xl font-bold">
             Find Senior Professionals

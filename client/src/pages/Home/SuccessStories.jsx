@@ -20,7 +20,7 @@ const SuccessStories = () => {
               </div>
             </div>
             <p className="text-gray-700">
-              "ReferrLand helped me get 3 interview calls within 2 weeks of
+              "ReferrLink helped me get 3 interview calls within 2 weeks of
               joining. The platform makes it so easy to connect with the right
               people."
             </p>

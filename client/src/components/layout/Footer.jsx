@@ -15,18 +15,21 @@ const Footer = () => {
               </p>
               <div className="mt-4 flex gap-4 text-gray-400">
                 <a
+                  target="_blank"
                   href="https://github.com/SurajCh6613"
                   className="hover:text-white"
                 >
                   GitHub
                 </a>
                 <a
+                  target="_blank"
                   href="https://www.linkedin.com/in/surajch6613"
                   className="hover:text-white"
                 >
                   LinkedIn
                 </a>
                 <a
+                  target="_blank"
                   href="mailto:surajchaudhary6613@gmail.com"
                   className="hover:text-white"
                 >

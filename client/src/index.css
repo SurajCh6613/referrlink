@@ -1,6 +1,13 @@
 @import 'tailwindcss';
 
 
+@layer utilities{
+    .section-padding{
+        @apply py-24 px-4 md:px-6;
+    }
+}
+
+
 /* Floating cards */
 @keyframes float {
 

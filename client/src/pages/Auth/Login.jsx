@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import axios from "axios";
@@ -9,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const { user, setUser, loading, setLoading } = useUser();
+  const { setUser, loading, setLoading } = useUser();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -52,7 +52,7 @@ const Login = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center w-full min-h-screen pt-18 h-full bg-gray-50 md:px-12 py-8">
+      <div className="flex items-center justify-center w-full min-h-screen h-full bg-gray-50 section-padding">
         <div className="flex flex-col gap-3 justify-between w-112 h-full rounded-md shadow-md px-10 py-2">
           <h3 className="text-3xl text-center font-semibold">
             Welcome back to Referr<span className="text-indigo-600">Link</span>
@@ -185,8 +185,12 @@ const Login = () => {
                 </div>
               </>
             )}
-            <button className="bg-indigo-500 w-full py-3 mt-2 rounded-md hover:bg-indigo-600 duration-300 text-white font-semibold cursor-pointer">
-              {isLogin ? "Login" : "Register"}
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-indigo-500 w-full py-3 mt-2 rounded-md hover:bg-indigo-600 duration-300 text-white disabled:bg-indigo-400 font-semibold cursor-pointer"
+            >
+              {loading ? "Processing..." : isLogin ? "Login" : "Register"}
             </button>
           </form>
 

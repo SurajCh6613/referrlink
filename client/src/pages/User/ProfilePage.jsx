@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import BACKEND_API from "../../config/config";
+import { ArrowLeft } from "lucide-react";
 
 const ProfilePage = () => {
   const { id } = useParams();
@@ -21,7 +22,14 @@ const ProfilePage = () => {
   }, []);
   if (!senior) return <div>Loading...</div>;
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 mt-4 bg-white rounded-2xl shadow-lg">
+    <div className="max-w-5xl mx-auto section-padding bg-white rounded-2xl shadow-lg">
+      <button
+        onClick={() => navigate(-1)}
+        className="flex text-blue-500 mb-4 hover:underline cursor-pointer"
+      >
+        <ArrowLeft />
+        Go Back
+      </button>
       {/* Avatar + Name */}
       <div className="flex items-center gap-4">
         <div className="w-24 h-24 rounded-full border text-4xl py-6 px-7 bg-indigo-100">

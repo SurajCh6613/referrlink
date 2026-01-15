@@ -41,7 +41,7 @@ const RequestReferralForm = () => {
   };
   return (
     <>
-      <div className="bg-white shadow-lg rounded-md mx-auto max-w-2xl mt-6 px-6 py-6">
+      <div className="bg-white shadow-lg rounded-md mx-auto max-w-2xl section-padding h-full">
         <div>
           <h2 className="text-sm md:text-xl font-semibold mb-3">
             Request Referral Form

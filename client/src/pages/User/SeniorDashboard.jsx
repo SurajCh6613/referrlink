@@ -94,11 +94,13 @@ const SeniorDashboard = () => {
   };
   // Fetching all Requests
   const fetchRequests = async () => {
-    const res = await axios.get(`${BACKEND_API}/api/referral/`, {
+    const { data } = await axios.get(`${BACKEND_API}/api/referral/`, {
       withCredentials: true,
     });
-    setRecentRequest(res.data.referralRequests);
+    setRecentRequest(data.referralRequests);
   };
+
+  console.log(recentRequests);
   // Fetching recent activities
   const fetchActivities = async () => {
     const res = await axios.get(`${BACKEND_API}/api/activity`, {
@@ -117,7 +119,7 @@ const SeniorDashboard = () => {
   if (!user) return navigate("/login");
   return (
     <>
-      <div className="min-h-screen bg-gray-50 p-6">
+      <div className="min-h-screen bg-gray-50 section-padding">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
@@ -166,17 +168,18 @@ const SeniorDashboard = () => {
                   className="p-6 hover:bg-gray-50 transition-colors"
                 >
                   <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-lg font-medium text-gray-900">
+                    <div className="w-full">
+                      <h3 className="text-lg font-medium text-gray-900 flex justify-between items-center">
                         {request.senderId.firstname} {request.senderId.lastname}
+                        <p className="text-xs md:text-sm text-gray-500">
+                          {new Date(request.createdAt).toDateString()}
+                        </p>
                       </h3>
                       <p className="text-gray-600">
                         {request.jobRole} at {request.company}
                       </p>
+                      <p className="text-sm w-full">{request.message}</p>
                     </div>
-                    <span className="text-sm text-gray-500">
-                      {new Date(request.createdAt).toDateString()}
-                    </span>
                   </div>
                   <div className="mt-4 flex space-x-3">
                     <button

@@ -5,7 +5,7 @@ const MyProfile = () => {
   const { user } = useUser();
   console.log(user);
   return (
-    <div className="min-h-screen bg-gray-50 md:p-6">
+    <div className="min-h-screen bg-gray-50 section-padding">
       <div className="max-w-4xl mx-auto">
         {/* Profile Picture */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
