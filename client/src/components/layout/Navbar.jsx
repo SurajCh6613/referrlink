@@ -18,7 +18,8 @@ const Navbar = () => {
         withCredentials: true,
       });
       setUser(null);
-      navigate("/");
+      localStorage.removeItem("user");
+      navigate("/login");
       toast.success("Logged out successfully.");
     } catch (error) {
       console.log(error);

@@ -49,7 +49,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Bio */}
-      <p className="mt-4 text-gray-700">{senior.about}</p>
+      <p className="mt-4 text-gray-700 whitespace-pre-line">{senior.about}</p>
 
       {/* Skills */}
       <div className="mt-6">

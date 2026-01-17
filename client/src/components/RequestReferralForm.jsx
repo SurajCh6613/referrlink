@@ -1,10 +1,13 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BACKEND_API from "../config/config";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useUser } from "../context/UserContext";
 
 const RequestReferralForm = () => {
+  const { user } = useUser();
+  console.log(user);
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = useState({
@@ -22,7 +25,7 @@ const RequestReferralForm = () => {
         formData,
         {
           withCredentials: true,
-        }
+        },
       );
       toast.success("Referral Request Sent Successfully");
       navigate(`/junior-dashboard`);
@@ -30,7 +33,7 @@ const RequestReferralForm = () => {
       toast.error(
         error.response?.data?.message ||
           error?.message ||
-          "Something went wrong!"
+          "Something went wrong!",
       );
     }
   };
@@ -39,6 +42,25 @@ const RequestReferralForm = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      message: `Hello Sir,  
+
+I noticed that ${formData.company || "your company"} is hiring for the role of ${formData.jobRole || "Full Stack Developer"}.  
+Given my experience with MERN stack development, Java, and building scalable web applications, I feel this position is a great match for my background.
+
+If it's not too much trouble, could you please refer me for this role?  
+I’d be happy to share my resume or any additional details needed.
+
+contact me:  ${user?.email}
+
+Thank you for your time and support!  
+– ${(user?.firstname+" "+user?.lastname)}`,
+    }));
+  }, [formData.company,formData.jobRole]);
+
   return (
     <>
       <div className="bg-white shadow-lg rounded-md mx-auto max-w-2xl section-padding h-full">

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const MyProfile = () => {
   const { user } = useUser();
-  console.log(user);
+
   return (
     <div className="min-h-screen bg-gray-50 section-padding">
       <div className="max-w-4xl mx-auto">
@@ -45,7 +45,7 @@ const MyProfile = () => {
             <div>
               <label
                 htmlFor="about"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 whitespace-pre-line"
               >
                 {user?.about}
               </label>

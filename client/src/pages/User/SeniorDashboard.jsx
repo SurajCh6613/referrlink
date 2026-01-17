@@ -100,7 +100,7 @@ const SeniorDashboard = () => {
     setRecentRequest(data.referralRequests);
   };
 
-  console.log(recentRequests);
+
   // Fetching recent activities
   const fetchActivities = async () => {
     const res = await axios.get(`${BACKEND_API}/api/activity`, {
@@ -178,7 +178,7 @@ const SeniorDashboard = () => {
                       <p className="text-gray-600">
                         {request.jobRole} at {request.company}
                       </p>
-                      <p className="text-sm w-full">{request.message}</p>
+                      <p className="text-sm w-full whitespace-pre-line">{request.message}</p>
                     </div>
                   </div>
                   <div className="mt-4 flex space-x-3">
