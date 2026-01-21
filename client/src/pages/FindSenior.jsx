@@ -31,13 +31,13 @@ const FindSenior = () => {
     const matchesCompany =
       !filters.company ||
       senior.experience?.some((exp) =>
-        exp.company.toLowerCase().includes(filters.company.toLowerCase())
+        exp.company.toLowerCase().includes(filters.company.toLowerCase()),
       );
 
     const matchesPosition =
       !filters.jobRole ||
       senior.experience?.some((exp) =>
-        exp.jobRole.toLowerCase().includes(filters.jobRole.toLowerCase())
+        exp.jobRole.toLowerCase().includes(filters.jobRole.toLowerCase()),
       );
     return matchesSearch && matchesCompany && matchesPosition;
   });
@@ -135,7 +135,7 @@ const FindSenior = () => {
                     <h1 className="text-xl font-bold">
                       {senior.firstname} {senior.lastname}
                     </h1>
-                    <h3 className="text-sm text-gray-700 mt-2">
+                    <h3 className="text-xs md:text-sm text-gray-700 mt-2">
                       {senior.experience.length > 0
                         ? `${
                             senior.experience[0]?.jobRole
@@ -144,10 +144,10 @@ const FindSenior = () => {
                           } at ${senior.experience[0].company}`
                         : ""}
                     </h3>
-                    <p className="text-sm text-gray-700 mt-2">
+                    <p className="text-xs md:text-sm text-gray-700 mt-2">
                       {senior?.location?.city}, {senior?.location?.country}
                     </p>
-                    <p className="flex gap-2 mt-2">
+                    <p className="flex flex-wrap gap-2 mt-2">
                       {senior?.skills.map((skill, index) => (
                         <li
                           key={index}
@@ -157,10 +157,10 @@ const FindSenior = () => {
                         </li>
                       ))}
                     </p>
-                    <div className="flex items-center gap-2 mt-4">
+                    <div className="flex flex-col md:flex-row items-center gap-2 mt-4">
                       <button
                         onClick={() => handleRequestReferral(senior._id)}
-                        className={`text-sm  font-semibold px-3 py-2  rounded-md  ${
+                        className={`text-xs md:text-sm w-full  font-semibold px-3 py-2 text-center rounded-md  ${
                           senior.connectionStatus === "pending"
                             ? "bg-gray-200 cursor-not-allowed text-gray-600"
                             : "cursor-pointer text-white bg-indigo-600 border hover:bg-indigo-700"
@@ -172,7 +172,7 @@ const FindSenior = () => {
                       </button>
                       <Link
                         to={`/user/${senior._id}`}
-                        className="text-sm   bg-gray-50 border-gray-400 cursor-pointer font-semibold px-3 py-2 hover:bg-gray-100 rounded-md border"
+                        className=" text-xs md:text-sm w-full text-center  bg-gray-50 border-gray-400 cursor-pointer font-semibold px-3 py-2 hover:bg-gray-100 rounded-md border"
                       >
                         View Profile
                       </Link>
@@ -185,8 +185,8 @@ const FindSenior = () => {
                       senior.connectionStatus === "pending"
                         ? "bg-yellow-100 text-yellow-800"
                         : senior.connectionStatus === "connected"
-                        ? "bg-green-100 text-green-800"
-                        : ""
+                          ? "bg-green-100 text-green-800"
+                          : ""
                     }`}
                   >
                     {senior?.connectionStatus}

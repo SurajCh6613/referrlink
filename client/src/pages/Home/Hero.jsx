@@ -167,7 +167,7 @@ export default function Hero() {
             opportunities through referrals.
           </p>
           <button
-            to={"/login"}
+            onClick={() => navigate("/login")}
             className="bg-indigo-600 text-white font-semibold py-3 px-6 rounded-md hover:bg-indigo-700 text-xl cursor-pointer"
           >
             Get Started - It's Free
