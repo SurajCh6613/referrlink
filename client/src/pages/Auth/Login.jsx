@@ -9,7 +9,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser, loading, setLoading } = useUser();
+  const [loading, setLoading] = useState(false);
+  const { setUser } = useUser();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -20,7 +21,7 @@ const Login = () => {
     company: "",
   });
 
-  
+
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
